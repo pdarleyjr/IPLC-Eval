@@ -176,8 +176,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 console.log('Sending prompt:', prompt); // Debug log
                 
-                // Join the queue - use relative path for Hugging Face Spaces
-                const joinResponse = await fetch('/queue/join', {
+                // Join the queue using the full Hugging Face space URL
+                const joinResponse = await fetch('https://pdarleyjr-t5.hf.space/queue/join', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Poll for results
                 let result;
                 while (true) {
-                const statusResponse = await fetch('/queue/status', {
+                const statusResponse = await fetch('https://pdarleyjr-t5.hf.space/queue/status', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
