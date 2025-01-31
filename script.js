@@ -183,21 +183,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        inputs: prompt,
-                        parameters: {
-                            max_length: 256,
-                            num_beams: 4,
-                            no_repeat_ngram_size: 3,
-                            length_penalty: 2.0,
-                            early_stopping: true
-                        }
+                        data: [
+                            prompt,
+                            256, // max_length
+                            4,   // num_beams
+                            3,   // no_repeat_ngram_size
+                            2.0, // length_penalty
+                            true // early_stopping
+                        ]
                     })
                 });
 
                 const result = await joinResponse.json();
                 console.log('API Response:', result);
 
-                if (result && result.data && Array.isArray(result.data) && result.data.length > 0) {
+                if (result && result.data && result.data[0]) {
                     const summary = result.data[0];
                     if (typeof summary === 'string' && summary.trim()) {
                         // Clean up the summary by removing any 'summarize:' prefix and trimming whitespace
