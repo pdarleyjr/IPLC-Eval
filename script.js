@@ -184,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        fn_index: 0,
                         data: [prompt]
                     })
                 });
