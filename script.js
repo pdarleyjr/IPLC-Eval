@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Sending prompt:', prompt); // Debug log
 
                 // Make request to Hugging Face Space API
-                const response = await fetch('https://pdarleyjr-t5.hf.space/run/predict/', {
+                const response = await fetch('https://pdarleyjr-t5.hf.space/api/predict', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
