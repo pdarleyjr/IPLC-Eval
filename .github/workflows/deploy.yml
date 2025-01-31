@@ -1,0 +1,90 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Install Dependencies
+        run: |
+          npm install -g html-minifier-terser
+          npm install -g clean-css-cli
+          npm install -g uglify-js
+          
+      - name: Optimize Assets
+        run: |
+          # Create dist directory
+          mkdir -p dist
+          
+          # Copy all files to dist
+          cp -r * dist/ 2>/dev/null || :
+          
+          # Minify HTML
+          find dist -name "*.html" -type f -exec html-minifier-terser --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true -o {} {} \;
+          
+          # Minify CSS
+          find dist -name "*.css" -type f -exec cleancss -o {} {} \;
+          
+          # Minify JavaScript
+          find dist -name "*.js" -type f -exec uglifyjs {} -o {} -c -m \;
+          
+          # Generate sitemap.xml
+          echo '<?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            <url>
+              <loc>https://pdarleyjr.github.io/IPLC-Eval/</loc>
+              <lastmod>'$(date -u +%Y-%m-%d)'</lastmod>
+              <changefreq>weekly</changefreq>
+              <priority>1.0</priority>
+            </url>
+          </urlset>' > dist/sitemap.xml
+          
+          # Generate robots.txt
+          echo 'User-agent: *
+          Allow: /
+          Sitemap: https://pdarleyjr.github.io/IPLC-Eval/sitemap.xml' > dist/robots.txt
+          
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
