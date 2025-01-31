@@ -1,0 +1,13 @@
+# Ignore IPLC directory with sensitive information
+IPLC/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+*.code-workspace
+
+# Logs
+*.log

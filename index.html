@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPLC Evaluation Report Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="400dpiLogo.PNG" alt="IPLC Logo" class="logo">
+        <h1>Speech-Language Evaluation Report Generator</h1>
+    </header>
+
+    <div class="tab-container">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="demographics">Patient Demographics</button>
+            <button class="tab-btn" data-tab="background">Relevant Background Information</button>
+            <button class="tab-btn" data-tab="instrumentation">Instrumentation</button>
+            <button class="tab-btn" data-tab="evaluation">Outcome of Evaluation</button>
+            <button class="tab-btn" data-tab="impressions">Impressions</button>
+            <button class="tab-btn" data-tab="recommendations">Recommendations</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- Patient Information Tab -->
+            <div class="tab-pane active" id="demographics">
+                <h2>Patient Information</h2>
+                <div class="form-group">
+                    <div class="section">
+                        <h3>Basic Information</h3>
+                        <label>Name:</label>
+                        <input type="text" id="patient-name">
+                        
+                        <label>Date of Birth:</label>
+                        <input type="date" id="dob">
+                        
+                        <label>Evaluation Date:</label>
+                        <input type="date" id="eval-date">
+                        
+                        <label>Age:</label>
+                        <select id="age-group">
+                            <option value="">Select age group...</option>
+                            <option value="infant">0-12 months</option>
+                            <option value="toddler">1-2 years</option>
+                            <option value="preschool">3-5 years</option>
+                            <option value="school-age">6-12 years</option>
+                            <option value="adolescent">13-18 years</option>
+                        </select>
+
+                        <label>Gender:</label>
+                        <div class="radio-group">
+                            <input type="radio" name="gender" id="male" value="male">
+                            <label for="male">Male</label>
+                            <input type="radio" name="gender" id="female" value="female">
+                            <label for="female">Female</label>
+                            <input type="radio" name="gender" id="other-gender" value="other">
+                            <label for="other-gender">Other</label>
+                        </div>
+
+                        <label>Evaluation Type:</label>
+                        <select id="eval-type">
+                            <option value="initial">Initial Evaluation</option>
+                            <option value="re-eval">Re-Evaluation</option>
+                        </select>
+
+                        <div id="re-eval-section" style="display: none;">
+                            <label>Previous Evaluation Date:</label>
+                            <input type="date" id="prev-eval-date">
+                            <label>Previous Therapy Duration:</label>
+                            <select id="prev-therapy-duration">
+                                <option value="">Select duration...</option>
+                                <option value="3months">3 months</option>
+                                <option value="6months">6 months</option>
+                                <option value="9months">9 months</option>
+                                <option value="1year">1 year</option>
+                                <option value="1.5years">1.5 years</option>
+                                <option value="2years">2+ years</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Diagnostic Information</h3>
+                        <label>Primary Diagnosis:</label>
+                        <select id="primary-diagnosis">
+                            <option value="">Select diagnosis...</option>
+                            <option value="F80.2">Mixed Receptive-Expressive Language Disorder (F80.2)</option>
+                            <option value="F84.0">Autism Spectrum Disorder (F84.0)</option>
+                            <option value="F80.0">Phonological Disorder (F80.0)</option>
+                            <option value="F80.1">Expressive Language Disorder (F80.1)</option>
+                        </select>
+                        
+                        <label>Secondary Diagnosis:</label>
+                        <select id="secondary-diagnosis">
+                            <option value="">Select diagnosis...</option>
+                            <option value="F80.2">Mixed Receptive-Expressive Language Disorder (F80.2)</option>
+                            <option value="F80.0">Phonological Disorder (F80.0)</option>
+                            <option value="F80.1">Expressive Language Disorder (F80.1)</option>
+                        </select>
+
+                        <label>Severity Level:</label>
+                        <select id="severity-level">
+                            <option value="">Select severity...</option>
+                            <option value="mild">Mild</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="severe">Severe</option>
+                            <option value="profound">Profound</option>
+                        </select>
+                    </div>
+
+                    <div class="section">
+                        <h3>Language Assessment</h3>
+                        <label>Primary Language:</label>
+                        <select id="primary-language">
+                            <option value="english">English</option>
+                            <option value="spanish">Spanish</option>
+                            <option value="other">Other</option>
+                        </select>
+                        
+                        <div id="other-language-section">
+                            <label>Other Languages:</label>
+                            <select id="other-languages" multiple>
+                                <option value="french">French</option>
+                                <option value="portuguese">Portuguese</option>
+                                <option value="mandarin">Mandarin</option>
+                                <option value="cantonese">Cantonese</option>
+                                <option value="vietnamese">Vietnamese</option>
+                                <option value="arabic">Arabic</option>
+                                <option value="russian">Russian</option>
+                                <option value="hindi">Hindi</option>
+                            </select>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="bilingual-assessment">
+                            <label for="bilingual-assessment">Requires Bilingual Assessment</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Background Information Tab -->
+            <div class="tab-pane" id="background">
+                <h2>Background Information</h2>
+                <div class="form-group">
+                    <div class="section">
+                        <h3>Executive Functioning & Working Memory</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="task-initiation">
+                            <label for="task-initiation">Difficulty with task initiation</label>
+                            
+                            <input type="checkbox" id="task-completion">
+                            <label for="task-completion">Completes multi-step tasks</label>
+                            
+                            <input type="checkbox" id="organization">
+                            <label for="organization">Shows organizational skills</label>
+                            
+                            <input type="checkbox" id="working-memory">
+                            <label for="working-memory">Working memory difficulties</label>
+                            
+                            <input type="checkbox" id="processing-speed">
+                            <label for="processing-speed">Reduced processing speed</label>
+                            
+                            <input type="checkbox" id="cognitive-flexibility">
+                            <label for="cognitive-flexibility">Shows cognitive flexibility</label>
+                            
+                            <input type="checkbox" id="problem-solving">
+                            <label for="problem-solving">Problem-solving difficulties</label>
+                        </div>
+                        <textarea placeholder="Notes about executive functioning and working memory..."></textarea>
+                    </div>
+
+                    <div class="section">
+                        <h3>Birth History</h3>
+                        <div class="radio-group">
+                            <label>Pregnancy Term:</label>
+                            <input type="radio" name="pregnancy" id="full-term" value="full-term">
+                            <label for="full-term">Full Term</label>
+                            <input type="radio" name="pregnancy" id="premature" value="premature">
+                            <label for="premature">Premature</label>
+                        </div>
+
+                        <div class="radio-group">
+                            <label>Delivery Type:</label>
+                            <input type="radio" name="delivery" id="vaginal" value="vaginal">
+                            <label for="vaginal">Vaginal Delivery</label>
+                            <input type="radio" name="delivery" id="cesarean" value="cesarean">
+                            <label for="cesarean">Cesarean Section</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label>Complications:</label>
+                            <input type="checkbox" id="jaundice">
+                            <label for="jaundice">Jaundice</label>
+                            <input type="checkbox" id="nicu">
+                            <label for="nicu">NICU Stay</label>
+                            <input type="checkbox" id="breathing">
+                            <label for="breathing">Breathing Difficulties</label>
+                        </div>
+                        <textarea placeholder="Additional birth history notes..."></textarea>
+                    </div>
+
+                    <div class="section">
+                        <h3>Medical History</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="ear-infections">
+                            <label for="ear-infections">History of ear infections</label>
+                            
+                            <input type="checkbox" id="tubes">
+                            <label for="tubes">PE tubes placement</label>
+                            
+                            <input type="checkbox" id="respiratory">
+                            <label for="respiratory">Respiratory issues</label>
+                            
+                            <input type="checkbox" id="seasonal">
+                            <label for="seasonal">Seasonal illnesses</label>
+                            
+                            <input type="checkbox" id="current-health">
+                            <label for="current-health">Currently in good health</label>
+                        </div>
+                        <textarea placeholder="Additional medical history notes..."></textarea>
+                    </div>
+
+                    <div class="section">
+                        <h3>Developmental History</h3>
+                        <div class="subsection">
+                            <h4>Motor Development</h4>
+                            <div class="radio-group">
+                                <input type="radio" name="motor" id="motor-normal" value="normal">
+                                <label for="motor-normal">Within Normal Limits</label>
+                                <input type="radio" name="motor" id="motor-delayed" value="delayed">
+                                <label for="motor-delayed">Reported Delayed</label>
+                            </div>
+                            <textarea placeholder="Motor development notes..."></textarea>
+                        </div>
+
+                        <div class="subsection">
+                            <h4>Language Development</h4>
+                            <div class="radio-group">
+                                <input type="radio" name="language-dev" id="language-normal" value="normal">
+                                <label for="language-normal">Within Normal Limits</label>
+                                <input type="radio" name="language-dev" id="language-delayed" value="delayed">
+                                <label for="language-delayed">Reported Delayed</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="first-concerns">
+                                <label for="first-concerns">Initial concerns noted</label>
+                                <select id="concerns-age">
+                                    <option value="">Select age...</option>
+                                    <option value="6-12m">6-12 months</option>
+                                    <option value="12-18m">12-18 months</option>
+                                    <option value="18-24m">18-24 months</option>
+                                    <option value="24-36m">24-36 months</option>
+                                    <option value="36m+">36+ months</option>
+                                </select>
+                            </div>
+                            <textarea placeholder="Language development notes..."></textarea>
+                        </div>
+
+                        <div class="subsection">
+                            <h4>Social Development</h4>
+                            <div class="radio-group">
+                                <input type="radio" name="social" id="social-normal" value="normal">
+                                <label for="social-normal">Within Normal Limits</label>
+                                <input type="radio" name="social" id="social-delayed" value="delayed">
+                                <label for="social-delayed">Reported Delayed</label>
+                            </div>
+                            <textarea placeholder="Social development notes..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Educational History</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="current-school">
+                            <label for="current-school">Currently enrolled in school</label>
+                        </div>
+                        <div class="school-details">
+                            <label>School Name:</label>
+                            <input type="text" id="school-name">
+                            
+                            <label>Grade Level:</label>
+                            <select id="grade-level">
+                                <option value="">Select grade level...</option>
+                                <option value="daycare">Daycare</option>
+                                <option value="preschool">Preschool</option>
+                                <option value="pre-k">Pre-K</option>
+                                <option value="kindergarten">Kindergarten</option>
+                                <option value="1st">1st Grade</option>
+                                <option value="2nd">2nd Grade</option>
+                                <option value="3rd">3rd Grade</option>
+                                <option value="4th">4th Grade</option>
+                                <option value="5th">5th Grade</option>
+                                <option value="6th">6th Grade</option>
+                            </select>
+                            
+                            <label>Previous Evaluations:</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="psychoed">
+                                <label for="psychoed">Psycho-educational</label>
+                                
+                                <input type="checkbox" id="speech">
+                                <label for="speech">Speech-Language</label>
+                                
+                                <input type="checkbox" id="occupational">
+                                <label for="occupational">Occupational Therapy</label>
+                            </div>
+                        </div>
+                        <textarea placeholder="Additional educational notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instrumentation Tab -->
+            <div class="tab-pane" id="instrumentation">
+                <h2>Instrumentation</h2>
+                <div class="form-group">
+                    <div class="section">
+                        <h3>Assessment Language</h3>
+                        <div class="radio-group">
+                            <input type="radio" name="assess-lang" id="assess-english" value="english">
+                            <label for="assess-english">English</label>
+                            
+                            <input type="radio" name="assess-lang" id="assess-spanish" value="spanish">
+                            <label for="assess-spanish">Spanish</label>
+                            
+                            <input type="radio" name="assess-lang" id="assess-bilingual" value="bilingual">
+                            <label for="assess-bilingual">Bilingual Assessment</label>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Formal Assessments</h3>
+                        <div class="checkbox-group">
+                            <h4>Language</h4>
+                            <input type="checkbox" id="pls5">
+                            <label for="pls5">PLS-5</label>
+                            
+                            <input type="checkbox" id="pls5-spanish">
+                            <label for="pls5-spanish">PLS-5 Spanish</label>
+                            
+                            <input type="checkbox" id="celf5">
+                            <label for="celf5">CELF-5</label>
+                            
+                            <input type="checkbox" id="celf5-spanish">
+                            <label for="celf5-spanish">CELF-5 Spanish</label>
+
+                            <h4>Articulation</h4>
+                            <input type="checkbox" id="caap2">
+                            <label for="caap2">CAAP-2</label>
+                            
+                            <input type="checkbox" id="gfta3">
+                            <label for="gfta3">GFTA-3</label>
+                            
+                            <input type="checkbox" id="gfta3-spanish">
+                            <label for="gfta3-spanish">GFTA-3 Spanish</label>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Informal Assessments</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="social-behavioral">
+                            <label for="social-behavioral">Social Behavioral Observation</label>
+                            
+                            <input type="checkbox" id="oral-peripheral">
+                            <label for="oral-peripheral">Oral-Peripheral Examination</label>
+                            
+                            <input type="checkbox" id="speech-sample">
+                            <label for="speech-sample">Speech Sample</label>
+                            
+                            <input type="checkbox" id="language-sample">
+                            <label for="language-sample">Language Sample</label>
+                            
+                            <input type="checkbox" id="connected-speech">
+                            <label for="connected-speech">Connected Speech Sample</label>
+                            
+                            <input type="checkbox" id="fluency">
+                            <label for="fluency">Fluency Assessment</label>
+                            
+                            <input type="checkbox" id="voice">
+                            <label for="voice">Voice Assessment</label>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Assessment Reliability</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="reliable-results">
+                            <label for="reliable-results">Results appear reliable</label>
+                        </div>
+                        <textarea placeholder="Notes about assessment reliability or factors affecting results..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outcome of Evaluation Tab -->
+            <div class="tab-pane" id="evaluation">
+                <h2>Outcome of Evaluation</h2>
+                <div class="form-group">
+                    <div class="section">
+                        <h3>Social Behavioral Observations</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="separated">
+                            <label for="separated">Separated from parent</label>
+                            
+                            <input type="checkbox" id="parent-present">
+                            <label for="parent-present">Parent present throughout evaluation</label>
+                            
+                            <input type="checkbox" id="minimal-coaxing">
+                            <label for="minimal-coaxing">Required minimal coaxing</label>
+                            
+                            <input type="checkbox" id="independent">
+                            <label for="independent">Engaged independently</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="eye-contact">
+                            <label for="eye-contact">Age-appropriate eye contact</label>
+                            
+                            <input type="checkbox" id="joint-attention">
+                            <label for="joint-attention">Joint attention established</label>
+                            
+                            <input type="checkbox" id="initiated">
+                            <label for="initiated">Initiated interactions</label>
+                            
+                            <input type="checkbox" id="responds-name">
+                            <label for="responds-name">Responds to name</label>
+                            
+                            <input type="checkbox" id="social-reciprocity">
+                            <label for="social-reciprocity">Shows social reciprocity</label>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Language Sample</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="free-play">
+                            <label for="free-play">Free Play</label>
+                            
+                            <input type="checkbox" id="structured">
+                            <label for="structured">Structured Activity</label>
+                            
+                            <input type="checkbox" id="conversation">
+                            <label for="conversation">Conversation</label>
+                            
+                            <input type="checkbox" id="story">
+                            <label for="story">Story Retell</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="babbling">
+                            <label for="babbling">Babbling with CV combinations</label>
+                            
+                            <input type="checkbox" id="no-spontaneous">
+                            <label for="no-spontaneous">No spontaneous speech</label>
+                            
+                            <input type="checkbox" id="one-word">
+                            <label for="one-word">One-word utterances</label>
+                            
+                            <input type="checkbox" id="two-three">
+                            <label for="two-three">2-3 word utterances</label>
+                            
+                            <input type="checkbox" id="complex">
+                            <label for="complex">Complex sentences</label>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Formal Assessment Results</h3>
+                        <select id="assessment-type" class="full-width">
+                            <option value="pls5">Preschool Language Scales (PLS-5)</option>
+                            <option value="pls5-spanish">PLS-5 Spanish</option>
+                            <option value="caap2">CAAP-2</option>
+                            <option value="celf5">CELF-5</option>
+                            <option value="gfta3">GFTA-3</option>
+                        </select>
+
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Subtest</th>
+                                    <th>Standard Score</th>
+                                    <th>Percentile Rank</th>
+                                    <th>Age Equivalent</th>
+                                    <th>Classification</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <select>
+                                            <option value="auditory">Auditory Comprehension</option>
+                                            <option value="expressive">Expressive Communication</option>
+                                            <option value="total">Total Language</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select score...</option>
+                                            <option value="130+">130+</option>
+                                            <option value="115-129">115-129</option>
+                                            <option value="85-114">85-114</option>
+                                            <option value="70-84">70-84</option>
+                                            <option value="<70"><70</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select percentile...</option>
+                                            <option value="99">99th</option>
+                                            <option value="90-98">90-98th</option>
+                                            <option value="25-89">25-89th</option>
+                                            <option value="10-24">10-24th</option>
+                                            <option value="<10"><10th</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select age...</option>
+                                            <option value="0-1">0-1 years</option>
+                                            <option value="1-2">1-2 years</option>
+                                            <option value="2-3">2-3 years</option>
+                                            <option value="3-4">3-4 years</option>
+                                            <option value="4-5">4-5 years</option>
+                                            <option value="5+">5+ years</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select classification...</option>
+                                            <option value="superior">Superior</option>
+                                            <option value="above-average">Above Average</option>
+                                            <option value="average">Average</option>
+                                            <option value="below-average">Below Average</option>
+                                            <option value="impaired">Impaired</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Impressions Tab -->
+            <div class="tab-pane" id="impressions">
+                <h2>Clinical Impressions</h2>
+                <div class="form-group">
+                    <div class="section">
+                        <h3>Overall Clinical Impressions</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="age-factor">
+                            <label for="age-factor">Note: Results less predictive due to young age</label>
+                        </div>
+
+                        <label>Communication Profile:</label>
+                        <select id="communication-profile">
+                            <option value="">Select profile...</option>
+                            <option value="typical">Age Appropriate</option>
+                            <option value="mild">Mild Delay/Disorder</option>
+                            <option value="moderate">Moderate Delay/Disorder</option>
+                            <option value="severe">Severe Delay/Disorder</option>
+                        </select>
+
+                        <div class="checkbox-group">
+                            <label>Areas of Concern:</label>
+                            <input type="checkbox" id="receptive-concern">
+                            <label for="receptive-concern">Receptive Language</label>
+                            
+                            <input type="checkbox" id="expressive-concern">
+                            <label for="expressive-concern">Expressive Language</label>
+                            
+                            <input type="checkbox" id="articulation-concern">
+                            <label for="articulation-concern">Articulation</label>
+                            
+                            <input type="checkbox" id="pragmatic-concern">
+                            <label for="pragmatic-concern">Social Communication</label>
+                        </div>
+                        <textarea placeholder="Enter detailed clinical impressions, including relative strengths and weaknesses..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations Tab -->
+            <div class="tab-pane" id="recommendations">
+                <h2>Recommendations</h2>
+                <div class="form-group">
+                    <div class="section">
+                        <h3>Therapy Recommendations</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="individual-therapy">
+                            <label for="individual-therapy">Individual speech-language therapy</label>
+                            
+                            <input type="checkbox" id="group-therapy">
+                            <label for="group-therapy">Group therapy sessions</label>
+                            
+                            <input type="checkbox" id="home-program">
+                            <label for="home-program">Home activities implementation</label>
+                            
+                            <input type="checkbox" id="school-consult">
+                            <label for="school-consult">School consultation</label>
+                            
+                            <input type="checkbox" id="parent-training">
+                            <label for="parent-training">Parent training/coaching</label>
+                        </div>
+                        
+                        <div class="therapy-details">
+                            <label>Frequency:</label>
+                            <select id="frequency">
+                                <option value="1x">1 time per week</option>
+                                <option value="2x">2 times per week</option>
+                                <option value="3x">3 times per week</option>
+                                <option value="4x">4 times per week</option>
+                            </select>
+                            
+                            <label>Duration:</label>
+                            <select id="duration">
+                                <option value="30">30 minutes</option>
+                                <option value="45">45 minutes</option>
+                                <option value="60">60 minutes</option>
+                            </select>
+
+                            <label>Treatment Period:</label>
+                            <select id="treatment-period">
+                                <option value="3months">3 months</option>
+                                <option value="6months">6 months</option>
+                                <option value="9months">9 months</option>
+                                <option value="12months">12 months</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Additional Recommendations</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="monitor-articulation">
+                            <label for="monitor-articulation">Monitor articulation development</label>
+                            
+                            <input type="checkbox" id="monitor-fluency">
+                            <label for="monitor-fluency">Monitor fluency</label>
+                            
+                            <input type="checkbox" id="ent-referral">
+                            <label for="ent-referral">ENT referral recommended</label>
+                            
+                            <input type="checkbox" id="audiological">
+                            <label for="audiological">Audiological evaluation</label>
+                            
+                            <input type="checkbox" id="developmental">
+                            <label for="developmental">Developmental pediatrician referral</label>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Follow-up Plan</h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="monthly-review">
+                            <label for="monthly-review">Monthly goal review</label>
+                            
+                            <input type="checkbox" id="progress-report">
+                            <label for="progress-report">Quarterly progress report</label>
+                            
+                            <input type="checkbox" id="re-eval">
+                            <label for="re-eval">Re-evaluation in 6 months</label>
+                        </div>
+                        
+                        <label>Prognosis:</label>
+                        <select id="prognosis">
+                            <option value="excellent">Excellent</option>
+                            <option value="good">Good</option>
+                            <option value="fair">Fair</option>
+                            <option value="guarded">Guarded</option>
+                        </select>
+                        
+                        <textarea placeholder="Additional follow-up notes or specific recommendations..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

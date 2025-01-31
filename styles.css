@@ -1,0 +1,335 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #F0F0F0;
+    color: #333333;
+    line-height: 1.6;
+}
+
+/* Header styles */
+header {
+    background-color: #003366;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.logo {
+    height: 100px;
+    width: auto;
+    margin: -15px 0;
+    z-index: 2;
+}
+
+h1 {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    z-index: 1;
+    padding: 0 150px;
+    font-size: 1.8rem;
+    line-height: 1.2;
+}
+
+/* Summary section styles */
+.summary-container {
+    display: none;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    animation: slideDown 0.3s ease-out;
+}
+
+.summary-container.visible {
+    display: block;
+}
+
+.summary-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+.generate-summary-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.75rem 1.5rem;
+    background-color: #8CC63F;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.generate-summary-btn:hover {
+    background-color: #7ab32e;
+}
+
+.generate-summary-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        position: static;
+        padding: 1rem 0;
+        font-size: 1.5rem;
+    }
+    
+    .logo {
+        height: 80px;
+        margin: 0;
+    }
+}
+
+/* Tab navigation */
+.tab-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: none;
+    color: #333333;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    background-color: #0073e6;
+    color: white;
+}
+
+.tab-btn.active {
+    background-color: #003366;
+    color: white;
+}
+
+/* Tab content */
+.tab-content {
+    padding: 2rem;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Form elements */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Background info specific layout */
+#background .form-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 2rem;
+}
+
+#background .form-group > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Specific section layouts */
+#background .form-group > div:nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
+#background .form-group > div:nth-child(2) { grid-area: 1 / 2 / 2 / 3; }
+#background .form-group > div:nth-child(3) { grid-area: 1 / 3 / 2 / 4; }
+#background .form-group > div:nth-child(4) { grid-area: 2 / 1 / 3 / 2; }
+#background .form-group > div:nth-child(5) { grid-area: 2 / 2 / 3 / 3; }
+
+/* Ensure consistent heights */
+#background .form-group > div {
+    min-height: 0;
+    height: fit-content;
+}
+
+#background textarea {
+    min-height: 80px;
+    max-width: none;
+}
+
+#background h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+label {
+    font-weight: bold;
+    color: #003366;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Checkbox and Radio groups */
+.checkbox-group,
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+
+.checkbox-group label,
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+/* Results table */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.results-table th,
+.results-table td {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.results-table th {
+    background-color: #003366;
+    color: white;
+}
+
+.results-table input,
+.results-table select {
+    width: 100%;
+    padding: 0.5rem;
+}
+
+/* Section headers */
+h2 {
+    color: #003366;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #8CC63F;
+}
+
+h3 {
+    color: #0073e6;
+    margin: 1rem 0;
+}
+
+/* Utility classes */
+.form-section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .tabs {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        width: 100%;
+        text-align: left;
+    }
+    
+    .results-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #background .form-group {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    #background .form-group > div:nth-child(1),
+    #background .form-group > div:nth-child(2),
+    #background .form-group > div:nth-child(3),
+    #background .form-group > div:nth-child(4),
+    #background .form-group > div:nth-child(5) {
+        grid-area: auto;
+    }
+}
