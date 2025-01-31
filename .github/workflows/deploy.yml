@@ -24,23 +24,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
-      - name: Install Dependencies
-        run: npm install
-          
-      - name: Build and Optimize
+      - name: Copy Files to Dist
         run: |
           mkdir -p dist
+          cp index.html dist/
+          cp styles.css dist/
+          cp script.js dist/
           cp 400dpiLogo.PNG dist/
-          npm run build
           
           # Generate sitemap.xml
           echo '<?xml version="1.0" encoding="UTF-8"?>
