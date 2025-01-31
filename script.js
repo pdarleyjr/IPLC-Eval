@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Form validation and data persistence
     const formInputs = document.querySelectorAll('input, select, textarea');
+
     formInputs.forEach(input => {
         // Load saved value if exists
         const savedValue = localStorage.getItem(input.id);
@@ -127,10 +128,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Add summary generation functionality to specific sections
+    // Summary generation functionality
     const summaryEnabledSections = ['demographics', 'background', 'evaluation', 'impressions'];
-    
-    summaryEnabledSections.forEach(sectionId => {
+
+    function createSummarySection(sectionId) {
         const section = document.getElementById(sectionId);
         if (!section) return;
 
@@ -145,12 +146,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const summaryContainer = document.createElement('div');
         summaryContainer.className = 'summary-container';
         summaryContainer.id = `${sectionId}-summary-container`;
-        
+
         const summaryTextarea = document.createElement('textarea');
         summaryTextarea.className = 'summary-textarea';
         summaryTextarea.id = `${sectionId}-summary-text`;
         summaryTextarea.placeholder = 'Generated summary will appear here...';
-        
+
         summaryContainer.appendChild(summaryTextarea);
         section.appendChild(summaryContainer);
 
@@ -165,34 +166,36 @@ document.addEventListener('DOMContentLoaded', function() {
         generateBtn.addEventListener('click', async () => {
             generateBtn.disabled = true;
             generateBtn.textContent = 'Generating...';
-            
+
             // Show container immediately
             summaryContainer.classList.add('visible');
             summaryTextarea.value = 'Generating summary...';
-            
+
             try {
                 const sectionData = collectSectionData(sectionId);
                 const prompt = formatPromptForSection(sectionId, sectionData);
-                
+
                 console.log('Sending prompt:', prompt); // Debug log
-                
-                // Use the Hugging Face Space API endpoint with the correct format
-                // Use the Gradio API endpoint
-                const response = await fetch('https://pdarleyjr-t5.hf.space/api/predict', {
+
+                // Make request to Hugging Face Space API
+                const response = await fetch('https://pdarleyjr-T5.hf.space/api/predict/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        data: [prompt],
-                        fn_index: 0
+                        data: [prompt]
                     })
                 });
+
+                if (!response.ok) {
+                    throw new Error(`API request failed: ${response.status}`);
+                }
 
                 const result = await response.json();
                 console.log('API Response:', result);
 
-                if (result && result.data && result.data[0]) {
+                if (result && Array.isArray(result.data) && result.data.length > 0) {
                     const summary = result.data[0];
                     if (typeof summary === 'string' && summary.trim()) {
                         // Clean up the summary by removing any 'summarize:' prefix and trimming whitespace
@@ -218,16 +221,20 @@ document.addEventListener('DOMContentLoaded', function() {
         summaryTextarea.addEventListener('change', () => {
             localStorage.setItem(`${sectionId}-summary`, summaryTextarea.value);
         });
+    }
+
+    summaryEnabledSections.forEach(sectionId => {
+        createSummarySection(sectionId);
     });
 
     function collectSectionData(sectionId) {
         const section = document.getElementById(sectionId);
         const data = {};
-        
+
         // Collect all input values from the section
         section.querySelectorAll('input, select, textarea').forEach(element => {
             if (element.classList.contains('summary-textarea')) return; // Skip summary textareas
-            
+
             if (element.type === 'checkbox' || element.type === 'radio') {
                 if (element.checked) {
                     data[element.id] = element.value || 'true';
@@ -240,55 +247,67 @@ document.addEventListener('DOMContentLoaded', function() {
                 data[element.id] = element.value;
             }
         });
-        
+
         return data;
     }
 
     function formatPromptForSection(sectionId, data) {
-        let prompt = '';
-        
+        let prompt = 'summarize: ';
+        const details = [];
+
         switch (sectionId) {
             case 'demographics':
-                prompt = `summarize patient demographics: ${data['age-group'] || ''} ${data['gender'] || ''} patient`;
-                if (data['primary-diagnosis']) prompt += `, diagnosed with ${data['primary-diagnosis']}`;
-                if (data['primary-language']) prompt += `, primary language ${data['primary-language']}`;
+                if (data['age-group']) details.push(`age group: ${data['age-group']}`);
+                if (data['gender']) details.push(`gender: ${data['gender']}`);
+                if (data['eval-type']) details.push(`evaluation type: ${data['eval-type']}`);
+                if (data['primary-diagnosis']) details.push(`primary diagnosis: ${data['primary-diagnosis']}`);
+                if (data['secondary-diagnosis']) details.push(`secondary diagnosis: ${data['secondary-diagnosis']}`);
+                if (data['severity-level']) details.push(`severity: ${data['severity-level']}`);
+                if (data['primary-language']) details.push(`primary language: ${data['primary-language']}`);
                 break;
-                
+
             case 'background':
-                prompt = 'summarize patient background:';
-                if (data['pregnancy']) prompt += ` birth history ${data['pregnancy']}`;
-                if (data['motor']) prompt += `, motor development ${data['motor']}`;
-                if (data['language-dev']) prompt += `, language development ${data['language-dev']}`;
+                if (data['pregnancy']) details.push(`pregnancy: ${data['pregnancy']}`);
+                if (data['delivery']) details.push(`delivery: ${data['delivery']}`);
+                if (data['motor']) details.push(`motor development: ${data['motor']}`);
+                if (data['language-dev']) details.push(`language development: ${data['language-dev']}`);
+                if (data['social']) details.push(`social development: ${data['social']}`);
+                if (data['concerns-age']) details.push(`initial concerns noted at age: ${data['concerns-age']}`);
                 break;
-                
+
             case 'evaluation':
-                prompt = 'summarize evaluation results:';
-                // Add formal assessment results if available
-                if (data['assessment-type']) {
-                    prompt += ` ${data['assessment-type']} assessment performed`;
-                }
-                // Add behavioral observations
-                if (data['eye-contact']) prompt += ', maintains eye contact';
-                if (data['joint-attention']) prompt += ', demonstrates joint attention';
+                if (data['assessment-type']) details.push(`assessment type: ${data['assessment-type']}`);
+                if (data['eye-contact']) details.push('maintains age-appropriate eye contact');
+                if (data['joint-attention']) details.push('demonstrates joint attention');
+                if (data['initiated']) details.push('initiates interactions');
+                if (data['responds-name']) details.push('responds to name');
+                if (data['social-reciprocity']) details.push('shows social reciprocity');
+
+                // Language sample details
+                const languageDetails = [];
+                if (data['babbling']) languageDetails.push('babbling with CV combinations');
+                if (data['one-word']) languageDetails.push('one-word utterances');
+                if (data['two-three']) languageDetails.push('2-3 word utterances');
+                if (data['complex']) languageDetails.push('complex sentences');
+                if (languageDetails.length) details.push(`language sample shows: ${languageDetails.join(', ')}`);
                 break;
-                
+
             case 'impressions':
-                prompt = 'summarize clinical impressions:';
-                if (data['communication-profile']) {
-                    prompt += ` ${data['communication-profile']} communication profile`;
-                }
-                // Add areas of concern
+                if (data['communication-profile']) details.push(`communication profile: ${data['communication-profile']}`);
+
                 const concerns = [];
                 if (data['receptive-concern']) concerns.push('receptive language');
                 if (data['expressive-concern']) concerns.push('expressive language');
                 if (data['articulation-concern']) concerns.push('articulation');
-                if (concerns.length) {
-                    prompt += `, concerns in ${concerns.join(', ')}`;
-                }
+                if (data['pragmatic-concern']) concerns.push('social communication');
+                if (concerns.length) details.push(`areas of concern: ${concerns.join(', ')}`);
+
+                if (data['age-factor']) details.push('results less predictive due to young age');
                 break;
         }
-        
-        return prompt.trim();
+
+        prompt += details.join('. ');
+        return prompt.trim() || `summarize ${sectionId} information`;
     }
 
     // Clear form data
@@ -306,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     `;
-    
+
     clearButton.addEventListener('click', () => {
         if (confirm('Are you sure you want to clear all form data? This cannot be undone.')) {
             localStorage.clear();
@@ -336,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-    
+
     document.body.appendChild(clearButton);
 
     // Export functionality
