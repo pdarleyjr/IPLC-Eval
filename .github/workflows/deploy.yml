@@ -29,40 +29,18 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
       - name: Install Dependencies
-        run: |
-          npm install -g html-minifier-terser
-          npm install -g clean-css-cli
-          npm install -g uglify-js
+        run: npm install
           
-      - name: Optimize Assets
+      - name: Build and Optimize
         run: |
-          # Create dist directory
           mkdir -p dist
-          
-          # Copy all files to dist
-          cp -r * dist/ 2>/dev/null || :
-          
-          # Minify HTML
-          find dist -name "*.html" -type f -exec html-minifier-terser --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true -o {} {} \;
-          
-          # Minify CSS
-          find dist -name "*.css" -type f -exec cleancss -o {} {} \;
-          
-          # Minify JavaScript
-          find dist -name "*.js" -type f -exec uglifyjs {} -o {} -c -m \;
+          cp 400dpiLogo.PNG dist/
+          npm run build
           
           # Generate sitemap.xml
           echo '<?xml version="1.0" encoding="UTF-8"?>
