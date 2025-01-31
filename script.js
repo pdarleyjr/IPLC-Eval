@@ -177,14 +177,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Sending prompt:', prompt); // Debug log
                 
                 // Use the Hugging Face Space API endpoint with the correct format
-                const joinResponse = await fetch('https://pdarleyjr-t5.hf.space/run/predict', {
+                const joinResponse = await fetch('https://pdarleyjr-t5.hf.space/api/v1/predict', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        data: [prompt],
-                        fn_index: 0
+                        inputs: prompt,
+                        parameters: {
+                            max_length: 256,
+                            num_beams: 4,
+                            no_repeat_ngram_size: 3,
+                            length_penalty: 2.0,
+                            early_stopping: true
+                        }
                     })
                 });
 
