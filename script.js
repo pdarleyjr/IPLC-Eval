@@ -176,55 +176,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 console.log('Sending prompt:', prompt); // Debug log
                 
-                // Join the queue using the full Hugging Face space URL
-                const joinResponse = await fetch('https://pdarleyjr-t5.hf.space/queue/join', {
+                // Use the Hugging Face Space API endpoint
+                const joinResponse = await fetch('https://pdarleyjr-t5.hf.space/api/predict', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        data: [prompt],
-                        fn_index: 0,
-                        session_hash: Date.now().toString()
+                        data: [prompt]
                     })
                 });
 
-                if (!joinResponse.ok) {
-                    const errorText = await joinResponse.text();
-                    console.error('Queue Join Error:', errorText);
-                    throw new Error(`Failed to join queue: ${joinResponse.status} ${errorText}`);
-                }
-
-                const queueData = await joinResponse.json();
-                const hash = queueData.hash;
-
-                // Poll for results
-                let result;
-                while (true) {
-                const statusResponse = await fetch('https://pdarleyjr-t5.hf.space/queue/status', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ hash })
-                    });
-
-                    if (!statusResponse.ok) {
-                        throw new Error(`Failed to check status: ${statusResponse.status}`);
-                    }
-
-                    const statusData = await statusResponse.json();
-                    if (statusData.status === 'COMPLETE') {
-                        result = statusData;
-                        break;
-                    } else if (statusData.status === 'FAILED') {
-                        throw new Error('Processing failed');
-                    }
-
-                    // Wait before polling again
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
-
+                const result = await joinResponse.json();
                 console.log('API Response:', result);
 
                 if (result && result.data && Array.isArray(result.data) && result.data.length > 0) {
