@@ -177,14 +177,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Sending prompt:', prompt); // Debug log
                 
                 // Use the Hugging Face Space API endpoint with the correct format
-                // Join the prediction queue
-                const response = await fetch('https://pdarleyjr-t5.hf.space/run/predict', {
+                // Use the Gradio API endpoint
+                const response = await fetch('https://pdarleyjr-t5.hf.space/api/predict', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        data: [prompt]
+                        data: [prompt],
+                        fn_index: 0
                     })
                 });
 
