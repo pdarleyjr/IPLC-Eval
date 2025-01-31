@@ -178,14 +178,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Sending prompt:', prompt); // Debug log
 
                 // Make request to Hugging Face Space API
-                const response = await fetch('https://pdarleyjr-t5.hf.space/api/predict', {
+                const response = await fetch('https://pdarleyjr-iplc-t5-clinical.hf.space/predict', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        fn_index: 0,
-                        data: [prompt]
+                        text: prompt
                     })
                 });
 
@@ -196,16 +195,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = await response.json();
                 console.log('API Response:', result);
 
-                if (result && Array.isArray(result.data) && result.data.length > 0) {
-                    const summary = result.data[0];
-                    if (typeof summary === 'string' && summary.trim()) {
-                        // Clean up the summary by removing any 'summarize:' prefix and trimming whitespace
-                        const cleanedSummary = summary.replace(/^summarize:\s*/i, '').trim();
-                        summaryTextarea.value = cleanedSummary;
-                        localStorage.setItem(`${sectionId}-summary`, cleanedSummary);
-                    } else {
-                        throw new Error('Empty or invalid response from model');
-                    }
+                if (result.success && result.data) {
+                    // Clean up the summary by removing any 'summarize:' prefix and trimming whitespace
+                    const cleanedSummary = result.data.replace(/^summarize:\s*/i, '').trim();
+                    summaryTextarea.value = cleanedSummary;
+                    localStorage.setItem(`${sectionId}-summary`, cleanedSummary);
+                } else if (result.error) {
+                    throw new Error(result.error);
                 } else {
                     throw new Error('Invalid response format from API');
                 }
