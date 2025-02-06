@@ -1,14 +1,36 @@
-# IPLC Evaluation Website
+# IPLC-Eval Project
 
-This repository contains the website files for IPLC Evaluation. The website provides information and resources related to speech-language pathology evaluations and intervention plans.
+## Introduction
+The IPLC-Eval project is designed to integrate various technologies to create a comprehensive evaluation platform. This project leverages advanced machine learning models to analyze and process data efficiently.
 
-## Files
+## Objectives and Goals
+- To provide a robust platform for data processing and analysis.
+- To integrate state-of-the-art machine learning models for enhanced performance.
 
-- `index.html` - Main webpage
-- `styles.css` - Website styling
-- `script.js` - JavaScript functionality
-- `400dpiLogo.PNG` - IPLC logo image
+## Features
+- Advanced data processing pipelines.
+- Integration with TensorFlow and other machine learning frameworks.
+- User-friendly web interface for easy interaction.
 
-## Hosting
+## Technical Architecture
+The project is structured into two main components:
+- **Frontend**: Developed using HTML, CSS, and JavaScript.
+- **Backend**: Managed with Python and FastAPI, hosted on Hugging Face Spaces.
 
-This website is hosted using GitHub Pages and can be accessed at: https://pdarleyjr.github.io/IPLC-Eval/
+## Installation and Setup
+To set up the project locally, follow these steps:
+1. Clone the repository: `git clone https://github.com/pdarleyjr/IPLC-Eval.git`
+2. Install dependencies: `npm install`
+3. Start the server: `npm start`
+
+## Usage
+Navigate to `localhost:8000` in your web browser to access the IPLC-Eval platform.
+
+## Contributing
+Contributions are welcome! Please read the contributing guidelines in CONTRIBUTING.md before submitting pull requests.
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contact Information
+For any inquiries, please contact [email](mailto:contact@iplceval.com).

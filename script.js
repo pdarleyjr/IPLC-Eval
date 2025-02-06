@@ -1,412 +1,748 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Tab switching functionality
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabPanes = document.querySelectorAll('.tab-pane');
+// Dark mode handling
+const themeToggle = document.getElementById('themeToggle');
+const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
 
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove active class from all buttons and panes
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            tabPanes.forEach(pane => pane.classList.remove('active'));
+// Custom template handling
+const customTemplateInput = document.getElementById('customTemplateInput');
+const customTemplateName = document.getElementById('customTemplateName');
+const saveCustomTemplate = document.getElementById('saveCustomTemplate');
+const templateOptions = document.querySelector('.template-options');
 
-            // Add active class to clicked button and corresponding pane
-            button.classList.add('active');
-            const tabId = button.getAttribute('data-tab');
-            document.getElementById(tabId).classList.add('active');
-        });
-    });
+// Load custom templates from localStorage
+function loadCustomTemplates() {
+  const customTemplates = JSON.parse(localStorage.getItem('customTemplates') || '[]');
+  customTemplates.forEach((template) => {
+    addCustomTemplateOption(template);
+  });
+}
 
-    // Re-evaluation section toggle
-    const evalTypeSelect = document.getElementById('eval-type');
-    const reEvalSection = document.getElementById('re-eval-section');
+// Add custom template option to the list
+function addCustomTemplateOption(templateName) {
+  const label = document.createElement('label');
+  label.className = 'template-option';
+  label.innerHTML = `
+    <input type="radio" name="templateType" value="${templateName}">
+    <span class="template-label">
+      <span class="template-icon">📝</span>
+      ${templateName}
+    </span>
+  `;
 
-    evalTypeSelect.addEventListener('change', () => {
-        reEvalSection.style.display = evalTypeSelect.value === 're-eval' ? 'block' : 'none';
-    });
+  // Insert before the "Other" option
+  const otherOption = document.querySelector('input[value="other"]').parentElement;
+  templateOptions.insertBefore(label, otherOption);
+}
 
-    // Other languages section toggle
-    const primaryLanguageSelect = document.getElementById('primary-language');
-    const otherLanguageSection = document.getElementById('other-language-section');
+// Sync evaluation type with template selection
+const evaluationTypeSelect = document.getElementById('evaluationType');
 
-    primaryLanguageSelect.addEventListener('change', () => {
-        otherLanguageSection.style.display = primaryLanguageSelect.value === 'other' ? 'block' : 'none';
-    });
+// Update evaluation type dropdown options
+function updateEvaluationTypeOptions() {
+  // Get all template radio buttons
+  const templateRadios = document.querySelectorAll('input[name="templateType"]');
+  const customTemplates = JSON.parse(localStorage.getItem('customTemplates') || '[]');
 
-    // Age calculation and group selection
-    const dobInput = document.getElementById('dob');
-    const evalDateInput = document.getElementById('eval-date');
-    const ageGroupSelect = document.getElementById('age-group');
+  // Clear existing options except the first one
+  while (evaluationTypeSelect.options.length > 1) {
+    evaluationTypeSelect.remove(1);
+  }
 
-    function calculateAge() {
-        if (dobInput.value && evalDateInput.value) {
-            const dob = new Date(dobInput.value);
-            const evalDate = new Date(evalDateInput.value);
-            
-            let years = evalDate.getFullYear() - dob.getFullYear();
-            let months = evalDate.getMonth() - dob.getMonth();
-            
-            if (months < 0) {
-                years--;
-                months += 12;
-            }
-            
-            // Adjust for day of month
-            if (evalDate.getDate() < dob.getDate()) {
-                months--;
-                if (months < 0) {
-                    years--;
-                    months += 12;
-                }
-            }
-
-            // Auto-select age group
-            if (years === 0 && months <= 12) {
-                ageGroupSelect.value = 'infant';
-            } else if (years === 1 || (years === 2 && months === 0)) {
-                ageGroupSelect.value = 'toddler';
-            } else if (years >= 3 && years <= 5) {
-                ageGroupSelect.value = 'preschool';
-            } else if (years >= 6 && years <= 12) {
-                ageGroupSelect.value = 'school-age';
-            } else if (years >= 13 && years <= 18) {
-                ageGroupSelect.value = 'adolescent';
-            }
-        }
+  // Add options from template radios
+  templateRadios.forEach((radio) => {
+    if (radio.value !== 'other') {
+      const label = radio.parentElement.querySelector('.template-label').textContent.trim();
+      const option = new Option(label, label);
+      evaluationTypeSelect.add(option);
     }
+  });
 
-    dobInput.addEventListener('change', calculateAge);
-    evalDateInput.addEventListener('change', calculateAge);
+  // Add custom templates
+  customTemplates.forEach((template) => {
+    const option = new Option(template, template);
+    evaluationTypeSelect.add(option);
+  });
+}
 
-    // Initial concerns age toggle
-    const firstConcernsCheckbox = document.getElementById('first-concerns');
-    const concernsAgeSelect = document.getElementById('concerns-age');
-
-    firstConcernsCheckbox.addEventListener('change', () => {
-        concernsAgeSelect.style.display = firstConcernsCheckbox.checked ? 'block' : 'none';
-    });
-
-    // Form validation and data persistence
-    const formInputs = document.querySelectorAll('input, select, textarea');
-
-    formInputs.forEach(input => {
-        // Load saved value if exists
-        const savedValue = localStorage.getItem(input.id);
-        if (savedValue) {
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                input.checked = savedValue === 'true';
-            } else if (input.multiple) {
-                // Handle multiple select
-                const selectedValues = JSON.parse(savedValue);
-                Array.from(input.options).forEach(option => {
-                    option.selected = selectedValues.includes(option.value);
-                });
-            } else {
-                input.value = savedValue;
-            }
-        }
-
-        // Save value on change
-        input.addEventListener('change', () => {
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                localStorage.setItem(input.id, input.checked);
-            } else if (input.multiple) {
-                // Handle multiple select
-                const selectedValues = Array.from(input.selectedOptions).map(option => option.value);
-                localStorage.setItem(input.id, JSON.stringify(selectedValues));
-            } else {
-                localStorage.setItem(input.id, input.value);
-            }
-
-            // Trigger visibility updates for dependent sections
-            if (input.id === 'eval-type') {
-                reEvalSection.style.display = input.value === 're-eval' ? 'block' : 'none';
-            } else if (input.id === 'primary-language') {
-                otherLanguageSection.style.display = input.value === 'other' ? 'block' : 'none';
-            } else if (input.id === 'first-concerns') {
-                concernsAgeSelect.style.display = input.checked ? 'block' : 'none';
-            }
-        });
-    });
-
-    // Summary generation functionality
-    const summaryEnabledSections = ['demographics', 'background', 'evaluation', 'impressions'];
-
-    function createSummarySection(sectionId) {
-        const section = document.getElementById(sectionId);
-        if (!section) return;
-
-        // Create and add the Generate Summary button
-        const generateBtn = document.createElement('button');
-        generateBtn.textContent = 'Generate Summary';
-        generateBtn.className = 'generate-summary-btn';
-        generateBtn.id = `${sectionId}-summary-btn`;
-        section.appendChild(generateBtn);
-
-        // Create container for summary (initially hidden)
-        const summaryContainer = document.createElement('div');
-        summaryContainer.className = 'summary-container';
-        summaryContainer.id = `${sectionId}-summary-container`;
-
-        const summaryTextarea = document.createElement('textarea');
-        summaryTextarea.className = 'summary-textarea';
-        summaryTextarea.id = `${sectionId}-summary-text`;
-        summaryTextarea.placeholder = 'Generated summary will appear here...';
-
-        summaryContainer.appendChild(summaryTextarea);
-        section.appendChild(summaryContainer);
-
-        // Load saved summary if exists
-        const savedSummary = localStorage.getItem(`${sectionId}-summary`);
-        if (savedSummary) {
-            summaryTextarea.value = savedSummary;
-            summaryContainer.classList.add('visible');
-        }
-
-        // Add click handler for generate button
-        generateBtn.addEventListener('click', async () => {
-            generateBtn.disabled = true;
-            generateBtn.textContent = 'Generating...';
-
-            // Show container immediately
-            summaryContainer.classList.add('visible');
-            summaryTextarea.value = 'Generating summary...';
-
-            try {
-                const sectionData = collectSectionData(sectionId);
-                const prompt = formatPromptForSection(sectionId, sectionData);
-
-                console.log('Sending prompt:', prompt); // Debug log
-
-                // Make request to Hugging Face Space API
-                const response = await fetch('https://pdarleyjr-iplc-t5-clinical.hf.space/predict', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        text: prompt
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API request failed: ${response.status}`);
-                }
-
-                const result = await response.json();
-                console.log('API Response:', result);
-
-                if (result.success && result.data) {
-                    // Clean up the summary by removing any 'summarize:' prefix and trimming whitespace
-                    const cleanedSummary = result.data.replace(/^summarize:\s*/i, '').trim();
-                    summaryTextarea.value = cleanedSummary;
-                    localStorage.setItem(`${sectionId}-summary`, cleanedSummary);
-                } else if (result.error) {
-                    throw new Error(result.error);
-                } else {
-                    throw new Error('Invalid response format from API');
-                }
-            } catch (error) {
-                console.error('Error generating summary:', error);
-                summaryTextarea.value = `Error: ${error.message}\nPlease try again.`;
-            } finally {
-                generateBtn.disabled = false;
-                generateBtn.textContent = 'Generate Summary';
-            }
-        });
-
-        // Save summary changes
-        summaryTextarea.addEventListener('change', () => {
-            localStorage.setItem(`${sectionId}-summary`, summaryTextarea.value);
-        });
+// Handle template type selection
+document.querySelectorAll('input[name="templateType"]').forEach((radio) => {
+  radio.addEventListener('change', (e) => {
+    customTemplateInput.style.display = e.target.value === 'other' ? 'block' : 'none';
+    if (e.target.value !== 'other') {
+      const label = e.target.parentElement.querySelector('.template-label').textContent.trim();
+      evaluationTypeSelect.value = label;
     }
-
-    summaryEnabledSections.forEach(sectionId => {
-        createSummarySection(sectionId);
-    });
-
-    function collectSectionData(sectionId) {
-        const section = document.getElementById(sectionId);
-        const data = {};
-
-        // Collect all input values from the section
-        section.querySelectorAll('input, select, textarea').forEach(element => {
-            if (element.classList.contains('summary-textarea')) return; // Skip summary textareas
-
-            if (element.type === 'checkbox' || element.type === 'radio') {
-                if (element.checked) {
-                    data[element.id] = element.value || 'true';
-                }
-            } else if (element.multiple) {
-                data[element.id] = Array.from(element.selectedOptions).map(opt => opt.value);
-            } else if (element.tagName.toLowerCase() === 'select') {
-                data[element.id] = element.value;
-            } else if (element.value) {
-                data[element.id] = element.value;
-            }
-        });
-
-        return data;
-    }
-
-    function formatPromptForSection(sectionId, data) {
-        let prompt = 'summarize: ';
-        const details = [];
-
-        switch (sectionId) {
-            case 'demographics':
-                if (data['age-group']) details.push(`age group: ${data['age-group']}`);
-                if (data['gender']) details.push(`gender: ${data['gender']}`);
-                if (data['eval-type']) details.push(`evaluation type: ${data['eval-type']}`);
-                if (data['primary-diagnosis']) details.push(`primary diagnosis: ${data['primary-diagnosis']}`);
-                if (data['secondary-diagnosis']) details.push(`secondary diagnosis: ${data['secondary-diagnosis']}`);
-                if (data['severity-level']) details.push(`severity: ${data['severity-level']}`);
-                if (data['primary-language']) details.push(`primary language: ${data['primary-language']}`);
-                break;
-
-            case 'background':
-                if (data['pregnancy']) details.push(`pregnancy: ${data['pregnancy']}`);
-                if (data['delivery']) details.push(`delivery: ${data['delivery']}`);
-                if (data['motor']) details.push(`motor development: ${data['motor']}`);
-                if (data['language-dev']) details.push(`language development: ${data['language-dev']}`);
-                if (data['social']) details.push(`social development: ${data['social']}`);
-                if (data['concerns-age']) details.push(`initial concerns noted at age: ${data['concerns-age']}`);
-                break;
-
-            case 'evaluation':
-                if (data['assessment-type']) details.push(`assessment type: ${data['assessment-type']}`);
-                if (data['eye-contact']) details.push('maintains age-appropriate eye contact');
-                if (data['joint-attention']) details.push('demonstrates joint attention');
-                if (data['initiated']) details.push('initiates interactions');
-                if (data['responds-name']) details.push('responds to name');
-                if (data['social-reciprocity']) details.push('shows social reciprocity');
-
-                // Language sample details
-                const languageDetails = [];
-                if (data['babbling']) languageDetails.push('babbling with CV combinations');
-                if (data['one-word']) languageDetails.push('one-word utterances');
-                if (data['two-three']) languageDetails.push('2-3 word utterances');
-                if (data['complex']) languageDetails.push('complex sentences');
-                if (languageDetails.length) details.push(`language sample shows: ${languageDetails.join(', ')}`);
-                break;
-
-            case 'impressions':
-                if (data['communication-profile']) details.push(`communication profile: ${data['communication-profile']}`);
-
-                const concerns = [];
-                if (data['receptive-concern']) concerns.push('receptive language');
-                if (data['expressive-concern']) concerns.push('expressive language');
-                if (data['articulation-concern']) concerns.push('articulation');
-                if (data['pragmatic-concern']) concerns.push('social communication');
-                if (concerns.length) details.push(`areas of concern: ${concerns.join(', ')}`);
-
-                if (data['age-factor']) details.push('results less predictive due to young age');
-                break;
-        }
-
-        prompt += details.join('. ');
-        return prompt.trim() || `summarize ${sectionId} information`;
-    }
-
-    // Clear form data
-    const clearButton = document.createElement('button');
-    clearButton.textContent = 'Clear All Data';
-    clearButton.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 10px 20px;
-        background-color: #FFA500;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    `;
-
-    clearButton.addEventListener('click', () => {
-        if (confirm('Are you sure you want to clear all form data? This cannot be undone.')) {
-            localStorage.clear();
-            formInputs.forEach(input => {
-                if (input.type === 'checkbox' || input.type === 'radio') {
-                    input.checked = false;
-                } else if (input.multiple) {
-                    Array.from(input.options).forEach(option => {
-                        option.selected = false;
-                    });
-                } else {
-                    input.value = '';
-                }
-            });
-
-            // Reset dependent sections
-            reEvalSection.style.display = 'none';
-            otherLanguageSection.style.display = 'none';
-            concernsAgeSelect.style.display = 'none';
-
-            // Clear summaries
-            summaryEnabledSections.forEach(sectionId => {
-                const container = document.getElementById(`${sectionId}-summary-container`);
-                const textarea = document.getElementById(`${sectionId}-summary-text`);
-                if (container) container.classList.remove('visible');
-                if (textarea) textarea.value = '';
-            });
-        }
-    });
-
-    document.body.appendChild(clearButton);
-
-    // Export functionality
-    const exportButton = document.createElement('button');
-    exportButton.textContent = 'Export Report';
-    exportButton.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 160px;
-        padding: 10px 20px;
-        background-color: #8CC63F;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    `;
-
-    exportButton.addEventListener('click', () => {
-        const formData = {};
-        formInputs.forEach(input => {
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                formData[input.id] = input.checked;
-            } else if (input.multiple) {
-                formData[input.id] = Array.from(input.selectedOptions).map(option => option.value);
-            } else {
-                formData[input.id] = input.value;
-            }
-        });
-
-        // Add summaries to export
-        summaryEnabledSections.forEach(sectionId => {
-            const textarea = document.getElementById(`${sectionId}-summary-text`);
-            if (textarea) {
-                formData[`${sectionId}-summary`] = textarea.value;
-            }
-        });
-
-        const dataStr = JSON.stringify(formData, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(dataBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `evaluation-report-${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    });
-
-    document.body.appendChild(exportButton);
-
-    // Trigger initial states
-    evalTypeSelect.dispatchEvent(new Event('change'));
-    primaryLanguageSelect.dispatchEvent(new Event('change'));
-    firstConcernsCheckbox.dispatchEvent(new Event('change'));
+  });
 });
+
+// Handle saving custom template
+saveCustomTemplate.addEventListener('click', () => {
+  const templateName = customTemplateName.value.trim();
+  if (templateName) {
+    // Save to localStorage
+    const customTemplates = JSON.parse(localStorage.getItem('customTemplates') || '[]');
+    if (!customTemplates.includes(templateName)) {
+      customTemplates.push(templateName);
+      localStorage.setItem('customTemplates', JSON.stringify(customTemplates));
+
+      // Add to options
+      addCustomTemplateOption(templateName);
+
+      // Update evaluation type dropdown
+      updateEvaluationTypeOptions();
+
+      // Select the new template and update evaluation type
+      const newTemplateRadio = document.querySelector(`input[value="${templateName}"]`);
+      if (newTemplateRadio) {
+        newTemplateRadio.checked = true;
+        evaluationTypeSelect.value = templateName;
+      }
+
+      // Clear and hide input
+      customTemplateName.value = '';
+      customTemplateInput.style.display = 'none';
+
+      showMessage('Custom template added successfully!', 'success');
+    } else {
+      showMessage('This template name already exists', 'error');
+    }
+  } else {
+    showMessage('Please enter a template name', 'error');
+  }
+});
+
+// Initialize theme
+function initializeTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    document.body.dataset.theme = savedTheme;
+  } else if (prefersDarkScheme.matches) {
+    document.body.dataset.theme = 'dark';
+  }
+  updateThemeToggleIcon();
+}
+
+function updateThemeToggleIcon() {
+  const isDark = document.body.dataset.theme === 'dark';
+  themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+}
+
+themeToggle.addEventListener('click', () => {
+  const isDark = document.body.dataset.theme === 'dark';
+  document.body.dataset.theme = isDark ? 'light' : 'dark';
+  localStorage.setItem('theme', document.body.dataset.theme);
+  updateThemeToggleIcon();
+});
+
+// Progress bar handling
+const progressBar = document.querySelector('.progress');
+let currentProgress = 0;
+const sections = document.querySelectorAll('.section');
+const totalSections = sections.length;
+
+function updateProgress() {
+  const filledSections = Array.from(sections).filter((section) => {
+    const inputs = section.querySelectorAll('input, select, textarea');
+    return Array.from(inputs).some((input) => input.value);
+  }).length;
+
+  currentProgress = (filledSections / totalSections) * 100;
+  progressBar.style.width = `${currentProgress}%`;
+}
+
+// Tab handling with enhanced animations
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabPanels = document.querySelectorAll('.section');
+
+function switchTab(targetTab) {
+  const targetPanel = document.getElementById(targetTab);
+
+  // Update tab buttons
+  tabButtons.forEach((button) => {
+    const isActive = button.dataset.tab === targetTab;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-selected', isActive);
+  });
+
+  // Animate out current panel
+  const currentPanel = document.querySelector('.section.active');
+  if (currentPanel) {
+    currentPanel.style.animation = 'fadeOut 150ms ease forwards';
+  }
+
+  // Animate in new panel
+  setTimeout(() => {
+    tabPanels.forEach((panel) => panel.classList.remove('active'));
+    targetPanel.classList.add('active');
+    targetPanel.style.animation = 'fadeIn 150ms ease forwards';
+  }, 150);
+}
+
+tabButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    switchTab(button.dataset.tab);
+  });
+});
+
+// Form handling with enhanced validation
+const form = document.getElementById('evaluationForm');
+const summaryPreview = document.getElementById('summaryPreview');
+const generatedSummary = document.getElementById('generatedSummary');
+
+// Age calculation with animation
+const dobInput = document.getElementById('dob');
+const ageInput = document.getElementById('age');
+
+dobInput.addEventListener('change', () => {
+  if (dobInput.value) {
+    const dob = new Date(dobInput.value);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+
+    // Animate age update
+    ageInput.style.animation = 'none';
+    ageInput.value = `${age} years`;
+    ageInput.style.animation = 'fadeIn 300ms ease';
+  }
+});
+
+// Enhanced form validation with visual feedback
+function validateForm() {
+  let isValid = true;
+  const requiredInputs = form.querySelectorAll('[required]');
+
+  requiredInputs.forEach((input) => {
+    if (!input.value) {
+      isValid = false;
+      showError(input);
+    } else {
+      clearError(input);
+    }
+  });
+
+  return isValid;
+}
+
+function showError(input) {
+  input.classList.add('error');
+  const errorMessage = document.createElement('div');
+  errorMessage.className = 'error-message';
+  errorMessage.textContent = 'This field is required';
+  errorMessage.style.animation = 'slideInRight 300ms ease';
+
+  // Remove existing error message if any
+  const existingError = input.parentElement.querySelector('.error-message');
+  if (existingError) {
+    existingError.remove();
+  }
+
+  input.parentElement.appendChild(errorMessage);
+
+  // Cleanup after animation
+  setTimeout(() => {
+    errorMessage.remove();
+  }, 3000);
+}
+
+function clearError(input) {
+  input.classList.remove('error');
+  const errorMessage = input.parentElement.querySelector('.error-message');
+  if (errorMessage) {
+    errorMessage.remove();
+  }
+}
+
+// Enhanced form submission with animation
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  if (!validateForm()) {
+    showMessage('Please fill in all required fields', 'error');
+    return;
+  }
+
+  // Show loading state
+  const submitButton = form.querySelector('button[type="submit"]');
+  const originalText = submitButton.innerHTML;
+  submitButton.innerHTML = '<span class="spinner"></span> Saving...';
+  submitButton.disabled = true;
+
+  try {
+    // Simulate API call
+    await new Promise((resolve) => {
+      setTimeout(() => resolve(), 1000);
+    });
+
+    showMessage('Evaluation saved successfully!', 'success');
+    updateProgress();
+  } catch (error) {
+    showMessage('Error saving evaluation', 'error');
+  } finally {
+    submitButton.innerHTML = originalText;
+    submitButton.disabled = false;
+  }
+});
+
+// Enhanced message display
+function showMessage(text, type = 'info') {
+  const message = document.createElement('div');
+  message.className = `${type}-message`;
+  message.textContent = text;
+  document.body.appendChild(message);
+
+  // Animate in
+  requestAnimationFrame(() => {
+    message.style.animation = 'slideInRight 300ms ease';
+  });
+
+  // Animate out and remove
+  setTimeout(() => {
+    message.style.animation = 'slideOutRight 300ms ease';
+    setTimeout(() => message.remove(), 300);
+  }, 3000);
+}
+
+// Print and PDF functionality with preview
+document.getElementById('printBtn').addEventListener('click', async () => {
+  // Extract header information from form data
+  const headerInfo = {
+    name: document.getElementById('name')?.value || '',
+    dob: document.getElementById('dob')?.value || '',
+    age: document.getElementById('age')?.value || '',
+    evaluationDate: document.getElementById('evaluationDate')?.value || '',
+    examiner: document.getElementById('examiner')?.value || '',
+    placeOfEvaluation: document.getElementById('placeOfEvaluation')?.value || '',
+  };
+
+  // Get evaluation type
+  const selectedTemplate = document.querySelector('input[name="templateType"]:checked');
+  const evaluationType = selectedTemplate
+    ? selectedTemplate.parentElement.querySelector('.template-label').textContent.trim() : '';
+
+  // Add header information to each section
+  sections.forEach((section) => {
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'evaluation-header';
+    headerDiv.innerHTML = `
+      <h1>${evaluationType}</h1>
+      <div class="header-info">
+        <p><strong>Name:</strong> ${headerInfo.name}</p>
+        <p><strong>Date of Birth:</strong> ${headerInfo.dob}</p>
+        <p><strong>Age:</strong> ${headerInfo.age}</p>
+        <p><strong>Evaluation Date:</strong> ${headerInfo.evaluationDate}</p>
+        <p><strong>Examiner:</strong> ${headerInfo.examiner}</p>
+        <p><strong>Place of Evaluation:</strong> ${headerInfo.placeOfEvaluation}</p>
+      </div>
+    `;
+
+    // Insert header at the beginning of each section
+    section.insertBefore(headerDiv, section.firstChild);
+  });
+
+  // Add print preview class
+  document.body.classList.add('print-preview');
+
+  // Show all sections for printing
+  sections.forEach((section) => {
+    section.style.display = 'block';
+  });
+
+  // Print/Save as PDF
+  window.print();
+
+  // Clean up after print
+  document.body.classList.remove('print-preview');
+  sections.forEach((section) => {
+    section.style.display = '';
+    // Remove the added headers
+    const header = section.querySelector('.evaluation-header');
+    if (header) {
+      section.removeChild(header);
+    }
+  });
+});
+
+// Generate summary functionality
+const generateButtons = document.querySelectorAll('.btn-generate-summary');
+
+generateButtons.forEach((button) => {
+  button.addEventListener('click', async () => {
+    const { section } = button.dataset;
+    const sectionElement = document.querySelector(`#${section}`);
+
+    // Show loading state
+    button.disabled = true;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<span class="spinner"></span> Generating...';
+
+    try {
+      // Generate base summary
+      const baseSummary = section === 'outcome' ? generateOutcomeSummary(section) : generateSectionSummary(section);
+
+      // Show initial summary with loading indicator
+      const summaryElement = sectionElement.querySelector('.section-summary');
+      summaryElement.innerHTML = `
+        <div class="summary-content">${baseSummary}</div>
+        <div class="summary-enhancement">
+          <span class="spinner"></span>
+          <span>Enhancing summary with AI...</span>
+        </div>
+      `;
+      summaryElement.style.display = 'block';
+
+      // Update preview with base summary initially
+      summaryPreview.classList.add('has-content');
+      const sectionTitle = section.charAt(0).toUpperCase() + section.slice(1);
+      generatedSummary.textContent = generatedSummary.textContent.replace(new RegExp(`${sectionTitle}:.*(?:\n|$)`), '');
+      generatedSummary.textContent += `\n${sectionTitle}: ${baseSummary}`;
+
+      // Enhance summary with AI
+      try {
+        const enhancedSummary = await enhanceSummaryWithAI(baseSummary, section);
+
+        // Update with enhanced summary
+        summaryElement.innerHTML = `<div class="summary-content">${enhancedSummary}</div>`;
+
+        // Update preview with enhanced version
+        generatedSummary.textContent = generatedSummary.textContent.replace(new RegExp(`${sectionTitle}:.*(?:\n|$)`), '');
+        generatedSummary.textContent += `\n${sectionTitle}: ${enhancedSummary}`;
+      } catch (error) {
+        // If AI enhancement fails, keep base summary
+        summaryElement.innerHTML = `
+          <div class="summary-content">${baseSummary}</div>
+          <div class="summary-error">
+            <small>AI enhancement unavailable. Showing base summary.</small>
+          </div>
+        `;
+        showMessage('AI enhancement unavailable. Using base summary.', 'warning');
+      }
+    } catch (error) {
+      showMessage('Error generating summary', 'error');
+    } finally {
+      button.innerHTML = originalText;
+      button.disabled = false;
+    }
+  });
+});
+
+// Generate meaningful summaries
+function generateSectionSummary(section) {
+  const selectedTemplate = document.querySelector('input[name="templateType"]:checked').value;
+
+  // Special handling for Impressions tab
+  if (section === 'impressions') {
+    return generateImpressionsSummary();
+  }
+
+  const summaryParts = [];
+
+  // Collect all input values dynamically
+  const inputs = document.querySelectorAll(`#${section} input:not([type="radio"]):not([type="submit"]), #${section} select, #${section} input[type="radio"]:checked, #${section} input[type="checkbox"]:checked`);
+  inputs.forEach((input) => {
+    if (input.value) {
+      if (input.type === 'checkbox') {
+        const label = input.parentElement.querySelector('.checkbox-label');
+        if (label) {
+          summaryParts.push(label.textContent);
+        }
+      } else {
+        const label = document.querySelector(`label[for="${input.id}"]`);
+        if (label) {
+          // Special handling for educational background
+          if (input.name === 'educationalBackground') {
+            summaryParts.push(`Educational Status: ${input.value === 'specialEd' ? 'Special Education' : input.value}`);
+          } else {
+            summaryParts.push(`${label.textContent}: ${input.value}`);
+          }
+        }
+      }
+    }
+  });
+
+  // Group related information by category
+  const summaryCategories = {
+    'Medical History': [],
+    'Birth History': [],
+    Development: [],
+    'Current Status': [],
+  };
+
+  // Categorize each part into appropriate category
+  summaryParts.forEach((part) => {
+    if (part.toLowerCase().includes('medical') || part.toLowerCase().includes('history')) {
+      summaryCategories['Medical History'].push(part);
+    } else if (part.toLowerCase().includes('birth') || part.toLowerCase().includes('nicu')) {
+      summaryCategories['Birth History'].push(part);
+    } else if (part.toLowerCase().includes('development') || part.toLowerCase().includes('delay')) {
+      summaryCategories.Development.push(part);
+    } else {
+      summaryCategories['Current Status'].push(part);
+    }
+  });
+
+  // Format each category
+  const formattedSections = Object.entries(summaryCategories)
+    .filter(([_, items]) => items.length > 0)
+    .map(([title, items]) => `${title}: ${items.join('; ')}`)
+    .join('. ');
+
+  return formattedSections || 'No data entered';
+}
+
+// Helper functions for outcome summary generation
+function getPerformanceLevel(value) {
+  const levels = ['Significantly Below Age Level', 'Below Age Level', 'Approaching Age Level', 'At Age Level', 'Above Age Level'];
+  return levels[parseInt(value, 10) - 1] || 'Not Assessed';
+}
+
+function getTurnTakingRating(value) {
+  const ratings = {
+    1: 'Poor',
+    2: 'Fair',
+    3: 'Good',
+    4: 'Excellent',
+  };
+  const numericValue = parseInt(value, 10);
+  return ratings[numericValue] || 'Not Assessed';
+}
+
+function getTestClassification(percentile) {
+  const percent = parseInt(percentile, 10);
+  if (isNaN(percent)) return 'Not Available';
+  if (percent >= 90) return 'Above Average';
+  if (percent >= 25) return 'Average';
+  if (percent >= 10) return 'Below Average';
+  return 'Significantly Below Average';
+}
+
+// Generate outcome summary with specified template
+function generateOutcomeSummary(section) {
+  // Get evaluation type from template selector
+  const templateType = document.querySelector('input[name="templateType"]:checked');
+  const evaluationType = templateType ? templateType.parentElement.querySelector('.template-label').textContent.trim() : '';
+
+  // Get outcome based on diagnosis and severity
+  const diagnosis = document.getElementById('diagnosis').value;
+  const severityLabel = document.getElementById('severityLabel').textContent;
+  const outcomeOfEvaluation = diagnosis ? `${severityLabel} ${diagnosis}` : 'Evaluation completed';
+
+  // Get test information from instrumentation tab
+  const selectedTests = Array.from(document.querySelectorAll('input[name="assessmentTools"]:checked'))
+    .map((input) => input.parentElement.querySelector('.checkbox-label').textContent.trim());
+  const testName = selectedTests.length > 0 ? selectedTests[0] : '';
+
+  // Collect data from outcome tab and other sections
+  const data = {
+    evaluationType,
+    outcomeOfEvaluation,
+    standardScore: document.querySelector('#standardScore')?.value || 'Not Available',
+    percentileRank: document.querySelector('#percentileRank')?.value || 'Not Available',
+    receptiveLanguage: getPerformanceLevel(document.querySelector('input[name="receptiveLanguage"]')?.value),
+    expressiveLanguage: getPerformanceLevel(document.querySelector('input[name="expressiveLanguage"]')?.value),
+    mlu: document.querySelector('input[name="mlu"]')?.value || 'Not Available',
+    ttr: document.querySelector('input[name="ttr"]')?.value || 'Not Available',
+    turnTakingRating: getTurnTakingRating(document.querySelector('select[name="turnTaking"]')?.value),
+    testName,
+    testScore: document.querySelector('#standardScore')?.value || 'Not Available',
+    testClassification: getTestClassification(document.querySelector('#percentileRank')?.value),
+  };
+
+  // Generate summary using template
+  return `During this evaluation for ${data.evaluationType}, the primary outcome was identified as ${data.outcomeOfEvaluation}. A comprehensive battery of assessments—combining standardized measures and functional observations—was administered to determine the client's current level of functioning. Test scores indicated a Standard Score of ${data.standardScore} and a Percentile Rank of ${data.percentileRank}, suggesting how the client's performance compares to age-matched peers.
+
+Performance Analysis revealed that the client's Receptive Language abilities are at a ${data.receptiveLanguage} level, while Expressive Language skills were observed to be at a ${data.expressiveLanguage} level. To gain further insight into the client's communication profile, a Language Sample Analysis was conducted. The client's Mean Length of Utterance (MLU) is ${data.mlu}, and the Type-Token Ratio (TTR) is ${data.ttr}, providing valuable information about syntactic complexity and lexical diversity.
+
+Regarding pragmatic skills, the Turn-Taking rating was ${data.turnTakingRating}, indicating potential strengths or needs in social interaction. In addition, Standardized Test Results from ${data.testName} yielded a Score of ${data.testScore}, classified as ${data.testClassification}, helping further characterize the client's developmental profile.
+
+Overall, these findings will guide the development of an individualized plan of care. Specific recommendations—based on the client's ${data.evaluationType} focus and test outcomes—may include targeted interventions, collaborative efforts with educational teams or caregivers, and ongoing progress monitoring. By addressing the areas of need identified in this assessment, the client can be supported in achieving functional goals across daily environments.`;
+}
+
+// Initialize Universal Sentence Encoder
+let useModel = null;
+
+// Function to load USE model
+async function loadUSE() {
+  try {
+    if (typeof window.tf === 'undefined') {
+      throw new Error('TensorFlow.js is not loaded');
+    }
+    useModel = await window.use.load();
+    console.log('Universal Sentence Encoder loaded successfully');
+  } catch (error) {
+    console.error('Error loading Universal Sentence Encoder:', error);
+  }
+}
+
+// Function to preprocess text using USE
+async function preprocessText(text) {
+  if (!useModel) {
+    console.warn('USE model not loaded yet');
+    return text;
+  }
+  try {
+    const embeddings = await useModel.embed([text]);
+    return embeddings.arraySync()[0];
+  } catch (error) {
+    console.error('Error preprocessing text:', error);
+    return text;
+  }
+}
+
+// Split text into chunks using array methods
+function splitIntoChunks(text, maxLength = 500) {
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  return sentences.reduce((chunks, sentence) => {
+    const lastChunk = chunks[chunks.length - 1] || '';
+    if ((lastChunk + sentence).length <= maxLength) {
+      chunks[chunks.length - 1] = (lastChunk + sentence).trim();
+    } else {
+      chunks.push(sentence.trim());
+    }
+    return chunks;
+  }, ['']);
+}
+
+// Initialize USE and custom templates when scripts are loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize theme
+  initializeTheme();
+
+  // Initialize custom templates and evaluation types
+  loadCustomTemplates();
+  updateEvaluationTypeOptions();
+
+  // Initialize USE
+  const maxWaitTime = 10000; // 10 seconds
+  const checkInterval = 100; // 100ms
+  let elapsed = 0;
+
+  const checkScripts = setInterval(() => {
+    if (window.tf && window.use) {
+      clearInterval(checkScripts);
+      loadUSE();
+    }
+    elapsed += checkInterval;
+    if (elapsed >= maxWaitTime) {
+      clearInterval(checkScripts);
+      console.warn('Timeout waiting for TensorFlow.js and USE to load');
+    }
+  }, checkInterval);
+});
+
+// Merge summaries using USE embeddings for coherence
+async function mergeSummaries(summaries) {
+  // Get embeddings for all summaries
+  const embeddings = await useModel.embed(summaries);
+  const vectors = embeddings.arraySync();
+
+  // Sort summaries by similarity to maintain flow
+  const orderedSummaries = summaries.map((text, i) => ({
+    text,
+    vector: vectors[i],
+  }));
+
+  // Order summaries by similarity
+  orderedSummaries.sort((a, b) => {
+    const similarityA = cosineSimilarity(vectors[0], a.vector);
+    const similarityB = cosineSimilarity(vectors[0], b.vector);
+    return similarityB - similarityA;
+  });
+
+  // Join ordered summaries with proper transitions
+  return orderedSummaries.map((s) => s.text).join(' ');
+}
+
+// Cosine similarity helper
+function cosineSimilarity(a, b) {
+  const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
+  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+  return dotProduct / (magnitudeA * magnitudeB);
+}
+
+// Generate impressions summary using the provided template
+function generateImpressionsSummary() {
+  // Get evaluation type from template selector
+  const templateType = document.querySelector('input[name="templateType"]:checked');
+  const evaluationType = templateType ? templateType.parentElement.querySelector('.template-label').textContent.trim() : '';
+
+  // Get areas of strength and need from checkboxes
+  const strengthAreas = Array.from(document.querySelectorAll('input[name="strengths"]:checked'))
+    .map((input) => input.parentElement.querySelector('.checkbox-label').textContent.trim())
+    .join(', ');
+
+  const needAreas = Array.from(document.querySelectorAll('input[name="needs"]:checked'))
+    .map((input) => input.parentElement.querySelector('.checkbox-label').textContent.trim())
+    .join(', ');
+
+  // Get clinical diagnosis
+  const diagnosis = document.getElementById('diagnosis')?.value || '';
+  const severityLevel = document.getElementById('severityLevel')?.value || '';
+
+  // Get impact ratings
+  const academicImpact = document.getElementById('academicImpact')?.value || '';
+  const socialImpact = document.getElementById('socialImpact')?.value || '';
+
+  // Apply the template
+  return `This evaluation, focusing on ${evaluationType}, highlights the client's strengths in ${strengthAreas} and identifies notable needs in ${needAreas}. These findings suggest a pattern of strengths in specific skill areas, while concurrently indicating targeted domains that warrant intervention or continued monitoring.
+
+A Clinical Diagnosis of ${diagnosis} has been selected based on both formal and informal assessment data. The Severity Level of these identified needs is rated as ${severityLevel}, reflecting the degree to which skill deficits may impact overall functioning.
+
+In terms of Impact on Daily Function, the Academic Impact is described as ${academicImpact}, while the Social Impact is rated as ${socialImpact}. These ratings provide an indication of how the client's areas of need may affect participation and success in educational, social, or other daily contexts.
+
+Overall, these clinical impressions confirm that while the client demonstrates notable strengths in ${strengthAreas}, intervention strategies should focus on improving ${needAreas} to support functional growth. The severity rating of ${severityLevel} and the subsequent impact levels will guide the development of an individualized care plan, which may involve additional assessment, consultation, or collaborative efforts with the educational team and caregivers. By addressing these identified domains, the client can build upon existing strengths and work toward achieving greater independence and success.`;
+}
+
+// Enhanced AI summary generation
+async function enhanceSummaryWithAI(baseSummary) {
+  try {
+    // Get evaluation type
+    const selectedTemplate = document.querySelector('input[name="templateType"]:checked');
+    const evaluationType = selectedTemplate ? selectedTemplate.parentElement.querySelector('.template-label').textContent.trim() : '';
+
+    // Get medical history
+    const medicalHistorySelect = document.getElementById('medicalHistory');
+    const medicalHistory = medicalHistorySelect ? medicalHistorySelect.value : '';
+
+    // Get educational background
+    const educationalBackgroundSelect = document.getElementById('educationalBackground');
+    const educationalBackground = educationalBackgroundSelect ? educationalBackgroundSelect.value : '';
+
+    // Get birth history
+    const birthHistoryChecks = document.querySelectorAll('input[name="birthHistory"]:checked');
+    const birthHistory = Array.from(birthHistoryChecks).map((check) => check.parentElement.querySelector('.checkbox-label').textContent).join(', ');
+
+    // Get family history
+    const familyHistoryRadio = document.querySelector('input[name="familyHistorySpeech"]:checked');
+    const familyHistory = familyHistoryRadio ? familyHistoryRadio.value : '';
+
+    // Get previous services
+    const previousServicesChecks = document.querySelectorAll('input[name="previousServices"]:checked');
+    const previousServices = Array.from(previousServicesChecks).map((check) => check.parentElement.querySelector('.checkbox-label').textContent).join(', ');
+
+    // Get current concerns
+    const currentConcernsSelect = document.getElementById('currentConcerns');
+    const currentConcerns = Array.from(currentConcernsSelect.selectedOptions).map((option) => option.text).join(', ');
+
+    // Get parent input
+    const parentInput = document.getElementById('parentInput').value;
+
+    // Apply the template
+    return `This ${evaluationType} evaluation was initiated to gather comprehensive background information about the client's developmental, educational, and medical history. According to the records provided, the client's Medical History is described as ${medicalHistory}. Educationally, the client is noted to have a background in ${educationalBackground || 'mainstream education'}.
+
+Regarding birth and early development, the client's history includes ${birthHistory || 'no reported complications'}, which may have implications for current functional or developmental abilities. Family history indicates ${familyHistory === 'yes' ? 'a positive history' : 'no history'} for speech-language disorders, suggesting potential genetic or environmental factors that could contribute to the client's current presentation.
+
+Previous services and evaluations include ${previousServices || 'no previous therapeutic interventions'}, reflecting a history of interventions designed to address developmental or functional concerns. At present, the client's Current Concerns focus on ${currentConcerns || 'areas to be determined through comprehensive evaluation'}. Further input from the parent or caregiver indicates ${parentInput || 'no additional concerns were reported'}, which provides additional context about the client's daily experiences and perceived challenges.
+
+These background details help inform a holistic perspective on the client's developmental profile, guiding the selection of appropriate assessments and interventions. By considering medical, educational, familial, and therapeutic factors, the evaluation process can be tailored to effectively address the client's needs and support meaningful progress across domains of functioning.`;
+  } catch (error) {
+    console.error('AI enhancement error:', error);
+    throw error;
+  }
+}
+
+// Handle system theme changes
