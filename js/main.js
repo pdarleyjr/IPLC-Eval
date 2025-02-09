@@ -6,6 +6,9 @@ class TabManager {
         console.log('TabManager initializing');
         this.tabs = document.querySelectorAll('.tab-btn');
         this.panels = document.querySelectorAll('.tab-panel');
+        this.prevBtn = document.querySelector('.prev-btn');
+        this.nextBtn = document.querySelector('.next-btn');
+        this.generateBtn = document.querySelector('#generateEvalBtn');
         console.log('Found tabs:', this.tabs.length);
         console.log('Found panels:', this.panels.length);
         
@@ -29,6 +32,70 @@ class TabManager {
         
         this.setupTabHandlers();
         this.setupTouchHandlers();
+        this.setupNavigationButtons();
+        this.setupGenerateButton();
+    }
+
+    setupNavigationButtons() {
+        if (this.prevBtn && this.nextBtn) {
+            this.prevBtn.addEventListener('click', () => this.focusPreviousTab());
+            this.nextBtn.addEventListener('click', () => this.focusNextTab());
+        }
+    }
+
+    setupGenerateButton() {
+        if (this.generateBtn) {
+            this.generateBtn.addEventListener('click', async () => {
+                try {
+                    // Collect form data
+                    const formData = {};
+                    document.querySelectorAll('form').forEach(form => {
+                        const formElements = form.elements;
+                        for (let element of formElements) {
+                            if (element.name && !element.disabled) {
+                                if (element.type === 'checkbox') {
+                                    formData[element.name] = element.checked;
+                                } else if (element.type === 'radio') {
+                                    if (element.checked) {
+                                        formData[element.name] = element.value;
+                                    }
+                                } else if (element.tagName === 'SELECT' && element.dataset.hasOther === 'true') {
+                                    formData[element.name] = element.value;
+                                    const otherInput = element.nextElementSibling;
+                                    if (otherInput && otherInput.classList.contains('other-input')) {
+                                        formData[`${element.name}_other`] = otherInput.value;
+                                    }
+                                } else {
+                                    formData[element.name] = element.value;
+                                }
+                            }
+                        }
+                    });
+
+                    // Generate evaluation using NLP manager
+                    if (window.nlpManager) {
+                        const evaluation = await window.nlpManager.generateEvaluation(formData);
+                        console.log('Generated evaluation:', evaluation);
+
+                        // Find the summary tab and switch to it
+                        const summaryTab = document.querySelector('[data-tab="summary"]');
+                        if (summaryTab) {
+                            this.switchTab(summaryTab);
+                            // Set the evaluation text in the textarea
+                            const summaryTextarea = document.getElementById('evaluationSummary');
+                            if (summaryTextarea) {
+                                summaryTextarea.value = evaluation;
+                                summaryTextarea.focus();
+                            }
+                        }
+                    } else {
+                        console.error('NLP Manager not initialized');
+                    }
+                } catch (error) {
+                    console.error('Error generating evaluation:', error);
+                }
+            });
+        }
     }
 
     initializeARIA() {
@@ -324,9 +391,17 @@ class FormInitializer {
 
         // Add provided options
         options.forEach(option => {
+            let value, text;
+            if (typeof option === 'string') {
+                value = option.toLowerCase().replace(/\s+/g, '-');
+                text = option;
+            } else {
+                value = option.value;
+                text = option.label;
+            }
             const optionElement = document.createElement('option');
-            optionElement.value = option.toLowerCase().replace(/\s+/g, '-');
-            optionElement.textContent = option;
+            optionElement.value = value;
+            optionElement.textContent = text;
             select.appendChild(optionElement);
         });
 
@@ -337,23 +412,27 @@ class FormInitializer {
         console.log('Initializing client info dropdowns');
         // Gender dropdown
         const genderOptions = [
-            'Male',
-            'Female',
-            'Non-binary',
-            'Prefer not to say',
-            'Other'
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+            { value: 'non-binary', label: 'Non-binary' },
+            { value: 'prefer-not-to-say', label: 'Prefer not to say' }
         ];
+        if (document.getElementById('gender').hasAttribute('data-has-other')) {
+            genderOptions.push({ value: 'other', label: 'Other' });
+        }
         this.populateDropdown('gender', genderOptions);
 
         // Language dropdowns
         const languages = [
-            'English',
-            'Spanish',
-            'French',
-            'Mandarin',
-            'Arabic',
-            'Other'
+            { value: 'english', label: 'English' },
+            { value: 'spanish', label: 'Spanish' },
+            { value: 'french', label: 'French' },
+            { value: 'mandarin', label: 'Mandarin' },
+            { value: 'arabic', label: 'Arabic' }
         ];
+        if (document.getElementById('primaryLanguage').hasAttribute('data-has-other')) {
+            languages.push({ value: 'other', label: 'Other' });
+        }
         this.populateDropdown('primaryLanguage', languages);
         this.populateDropdown('secondaryLanguage', languages);
 
@@ -364,8 +443,7 @@ class FormInitializer {
             'Blue Cross',
             'Aetna',
             'UnitedHealth',
-            'Cigna',
-            'Other'
+            'Cigna'
         ];
         this.populateDropdown('insuranceProvider', insuranceOptions);
 
@@ -375,8 +453,7 @@ class FormInitializer {
             'School',
             'Parent',
             'Self',
-            'Other Healthcare Provider',
-            'Other'
+            'Other Healthcare Provider'
         ];
         this.populateDropdown('referralSource', referralOptions);
 
@@ -414,17 +491,28 @@ class FormInitializer {
 
     setupOtherInputHandlers() {
         document.querySelectorAll('select[data-has-other="true"]').forEach(select => {
+            // Remove any existing other input fields
+            const existingOtherInput = select.nextElementSibling;
+            if (existingOtherInput && existingOtherInput.classList.contains('other-input')) {
+                existingOtherInput.remove();
+            }
+
+            // Create new other input field
             const otherInput = document.createElement('input');
             otherInput.type = 'text';
             otherInput.className = 'form-input other-input';
             otherInput.style.display = 'none';
             otherInput.style.fontSize = '16px'; // Prevent iOS zoom
-            otherInput.placeholder = `Please specify ${select.name}`;
+            otherInput.placeholder = `Please specify other ${select.name.replace(/([A-Z])/g, ' $1').toLowerCase()}`;
+            otherInput.setAttribute('aria-label', `Other ${select.name.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
             select.parentNode.insertBefore(otherInput, select.nextSibling);
 
             select.addEventListener('change', () => {
                 otherInput.style.display = select.value === 'other' ? 'block' : 'none';
-                if (select.value === 'other') otherInput.focus();
+                if (select.value === 'other') {
+                    otherInput.focus();
+                    otherInput.value = ''; // Clear the input when showing
+                }
             });
         });
     }

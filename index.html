@@ -3,21 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPLC Evaluation Form</title>
+    <title>Evaluation Form</title>
+    
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="favicon_io/site.webmanifest">
+    <link rel="shortcut icon" href="favicon_io/favicon.ico">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/noise-texture.css">
     
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
+    
     <!-- Preload critical assets -->
-    <link rel="preload" href="assets/logo.png" as="image">
+    <link rel="preload" href="assets/logo.png" as="image" type="image/png">
 </head>
 <body>
     <div class="container">
         <header class="header">
             <img src="assets/logo.png" alt="IPLC Logo" class="logo">
-            <h1>Initial Patient Evaluation</h1>
+            <h1>Evaluation Form</h1>
         </header>
 
         <main class="main">
@@ -40,6 +51,9 @@
                     </button>
                     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="recommendations" data-tab="recommendations">
                         Recommendations
+                    </button>
+                    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="summary" data-tab="summary">
+                        Summary
                     </button>
                 </div>
 
@@ -95,40 +109,40 @@
                                         <input type="email" id="email" name="email" class="form-input" data-required="true" placeholder="email@example.com">
                                     </div>
                                 </div>
+                                    <!-- Insurance and Referral Information Section -->
+                                    <div class="form-section span-2">
+                                        <h3>Insurance and Referral Information</h3>
+                                        <div class="form-row">
+                                            <div class="form-field">
+                                                <label for="insuranceProvider">Insurance Provider</label>
+                                                <select id="insuranceProvider" name="insuranceProvider" class="form-input" data-has-other="true">
+                                                    <option value="">Select...</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-field">
+                                                <label for="referralSource">Referral Source</label>
+                                                <select id="referralSource" name="referralSource" class="form-input" data-has-other="true">
+                                                    <option value="">Select...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                             </div>
 
-                            <!-- Insurance and Referral Section -->
-                            <div class="form-section span-2">
-                                <h3>Insurance and Referral</h3>
-                                <div class="form-row">
-                                    <div class="form-field">
-                                        <label for="insuranceProvider">Insurance Provider</label>
-                                        <select id="insuranceProvider" name="insuranceProvider" class="form-input" data-has-other="true" data-required="true">
-                                            <option value="">Select...</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-field">
-                                        <label for="referralSource">Referral Source</label>
-                                        <select id="referralSource" name="referralSource" class="form-input" data-has-other="true" data-required="true">
-                                            <option value="">Select...</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
+                           
                             <!-- Language Information Section -->
                             <div class="form-section span-2">
                                 <h3>Language Information</h3>
                                 <div class="form-row">
                                     <div class="form-field">
                                         <label for="primaryLanguage">Primary Language</label>
-                                        <select id="primaryLanguage" name="primaryLanguage" class="form-input" data-has-other="true" data-required="true">
+                                        <select id="primaryLanguage" name="primaryLanguage" class="form-input" data-has-other="true">
                                             <option value="">Select...</option>
                                         </select>
                                     </div>
                                     <div class="form-field">
                                         <label for="secondaryLanguage">Secondary Language</label>
-                                        <select id="secondaryLanguage" name="secondaryLanguage" class="form-input" data-has-other="true">
+                                        <select id="secondaryLanguage" name="secondaryLanguage" class="form-input">
                                             <option value="">Select...</option>
                                         </select>
                                     </div>
@@ -141,14 +155,19 @@
                                 <div class="form-row">
                                     <div class="form-field">
                                         <label for="educationalSetting">Educational Setting</label>
-                                        <input type="text" id="educationalSetting" name="educationalSetting" class="form-input" data-required="true" placeholder="School/Institution Name">
+                                        <select id="educationalSetting" name="educationalSetting" class="form-input" data-has-other="true">
+                                            <option value="">Select...</option>
+                                        </select>
                                     </div>
                                     <div class="form-field">
                                         <label for="gradeLevel">Grade Level</label>
-                                        <input type="text" id="gradeLevel" name="gradeLevel" class="form-input" data-required="true" placeholder="Current Grade">
+                                        <select id="gradeLevel" name="gradeLevel" class="form-input">
+                                            <option value="">Select...</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
+                            
                         </form>
                     </div>
 
@@ -370,6 +389,7 @@
                     <!-- Other tabs will be added in subsequent updates -->
                     <div class="tab-panel" id="instrumentation" role="tabpanel" aria-labelledby="tab-instrumentation">
                         <form id="instrumentationForm" class="form-grid">
+                            <!-- Remove Language and Educational sections from here -->
                             <!-- Assessment Tools Section -->
                             <div class="form-section span-2">
                                 <h3>Assessment Tools</h3>
@@ -379,6 +399,10 @@
                                         <label class="checkbox-label">
                                             <input type="checkbox" name="assessment-tools" value="collection">
                                             Collection of Relevant Background Information
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="assessment-tools" value="behavioral">
+                                            Behavioral Observation
                                         </label>
                                         <label class="checkbox-label">
                                             <input type="checkbox" name="assessment-tools" value="oral-mechanism">
@@ -391,6 +415,22 @@
                                         <label class="checkbox-label">
                                             <input type="checkbox" name="assessment-tools" value="connected-speech">
                                             Connected Speech Sample Analysis
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="assessment-tools" value="celf-5">
+                                            Clinical Evaluation of Language Fundamentals (CELF-5)
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="assessment-tools" value="ctopp-2">
+                                            Comprehensive Test of Phonological Processing (CTOPP-2)
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="assessment-tools" value="dibels-8">
+                                            Dynamic Indicators of Basic Early Literacy Skills (DIBELS-8)
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="assessment-tools" value="caap-2">
+                                            Clinical Assessment of Articulation and Phonology (CAAP-2)
                                         </label>
                                         <label class="checkbox-label">
                                             <input type="checkbox" name="assessment-tools" value="peabody">
@@ -463,6 +503,97 @@
                                     <!-- PDMS-3 Scores -->
                                     <div id="pdms-3-scores" class="test-scores" style="display: none;">
                                         <h4>PDMS-3 Subtests</h4>
+                                    </div>
+                                    
+                                    <!-- CELF-5 Scores -->
+                                    <div id="celf-5-scores" class="test-scores" style="display: none;">
+                                        <h4>CELF-5 Scores</h4>
+                                        <div class="form-row">
+                                            <div class="form-field">
+                                                <label for="celf-core">Core Language Score</label>
+                                                <input type="number" id="celf-core" name="celf-core" class="form-input" placeholder="Standard Score">
+                                                <input type="number" id="celf-core-percentile" name="celf-core-percentile" class="form-input" placeholder="Percentile Rank">
+                                            </div>
+                                            <div class="form-field">
+                                                <label for="celf-receptive">Receptive Language Index</label>
+                                                <input type="number" id="celf-receptive" name="celf-receptive" class="form-input" placeholder="Standard Score">
+                                                <input type="number" id="celf-receptive-percentile" name="celf-receptive-percentile" class="form-input" placeholder="Percentile Rank">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-field">
+                                                <label for="celf-expressive">Expressive Language Index</label>
+                                                <input type="number" id="celf-expressive" name="celf-expressive" class="form-input" placeholder="Standard Score">
+                                                <input type="number" id="celf-expressive-percentile" name="celf-expressive-percentile" class="form-input" placeholder="Percentile Rank">
+                                            </div>
+                                            <div class="form-field">
+                                                <label for="celf-content">Language Content Index</label>
+                                                <input type="number" id="celf-content" name="celf-content" class="form-input" placeholder="Standard Score">
+                                                <input type="number" id="celf-content-percentile" name="celf-content-percentile" class="form-input" placeholder="Percentile Rank">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- CTOPP-2 Scores -->
+                                    <div id="ctopp-2-scores" class="test-scores" style="display: none;">
+                                        <h4>CTOPP-2 Subtests</h4>
+                                        <div class="form-row">
+                                            <div class="form-field">
+                                                <label for="ctopp-elision">Elision</label>
+                                                <input type="number" id="ctopp-elision" name="ctopp-elision" class="form-input" placeholder="Raw Score">
+                                            </div>
+                                            <div class="form-field">
+                                                <label for="ctopp-blending">Blending Words</label>
+                                                <input type="number" id="ctopp-blending" name="ctopp-blending" class="form-input" placeholder="Raw Score">
+                                            </div>
+                                            <div class="form-field">
+                                                <label for="ctopp-isolation">Phoneme Isolation</label>
+                                                <input type="number" id="ctopp-isolation" name="ctopp-isolation" class="form-input" placeholder="Raw Score">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DIBELS-8 Scores -->
+                                    <div id="dibels-8-scores" class="test-scores" style="display: none;">
+                                        <h4>DIBELS-8 Assessment</h4>
+                                        <div class="form-row">
+                                            <div class="form-field">
+                                                <label for="dibels-letter">Letter Naming Fluency</label>
+                                                <input type="number" id="dibels-letter" name="dibels-letter" class="form-input" placeholder="Score">
+                                            </div>
+                                            <div class="form-field">
+                                                <label for="dibels-phoneme">Phoneme Segmentation Fluency</label>
+                                                <input type="number" id="dibels-phoneme" name="dibels-phoneme" class="form-input" placeholder="Score">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-field">
+                                                <label for="dibels-nonsense">Nonsense Word Fluency</label>
+                                                <input type="number" id="dibels-nonsense" name="dibels-nonsense" class="form-input" placeholder="Score">
+                                            </div>
+                                            <div class="form-field">
+                                                <label for="dibels-oral">Oral Reading Fluency</label>
+                                                <input type="number" id="dibels-oral" name="dibels-oral" class="form-input" placeholder="Score">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- CAAP-2 Scores -->
+                                    <div id="caap-2-scores" class="test-scores" style="display: none;">
+                                        <h4>CAAP-2 Assessment</h4>
+                                        <div class="form-row">
+                                            <div class="form-field">
+                                                <label for="caap-single">Single Word Production</label>
+                                                <input type="number" id="caap-single" name="caap-single" class="form-input" placeholder="Raw Score">
+                                                <input type="number" id="caap-single-percentile" name="caap-single-percentile" class="form-input" placeholder="Percentile Rank">
+                                            </div>
+                                            <div class="form-field">
+                                                <label for="caap-phonological">Phonological Processes</label>
+                                                <input type="number" id="caap-phonological" name="caap-phonological" class="form-input" placeholder="Raw Score">
+                                                <input type="number" id="caap-phonological-percentile" name="caap-phonological-percentile" class="form-input" placeholder="Percentile Rank">
+                                            </div>
+                                        </div>
+                                    </div>
                                         <div class="form-row">
                                             <div class="form-field">
                                                 <label for="pdms-bc">Body Control (BC)</label>
@@ -494,7 +625,6 @@
                     </div>
                     <div class="tab-panel" id="outcome" role="tabpanel" aria-labelledby="tab-outcome">
                         <form id="outcomeForm" class="form-grid">
-                            <!-- Oral Mechanism Evaluation Section -->
                             <div class="form-section span-2">
                                 <h3>Oral Mechanism Evaluation</h3>
                                 
@@ -675,7 +805,6 @@
                     </div>
                     <div class="tab-panel" id="impressions" role="tabpanel" aria-labelledby="tab-impressions">
                         <form id="impressionsForm" class="form-grid">
-                            <!-- Clinical Impressions Section -->
                             <div class="form-section span-2">
                                 <h3>Clinical Impressions</h3>
                                 <div class="form-row">
@@ -779,7 +908,6 @@
                     </div>
                     <div class="tab-panel" id="recommendations" role="tabpanel" aria-labelledby="tab-recommendations">
                         <form id="recommendationsForm" class="form-grid">
-                            <!-- Therapy Recommendations Section -->
                             <div class="form-section span-2">
                                 <h3>Therapy Recommendations</h3>
                                 <div class="form-row">
@@ -915,14 +1043,36 @@
                             </div>
                         </form>
                     </div>
+                    
+                    <!-- Summary Tab -->
+                    <div class="tab-panel" id="summary" role="tabpanel" aria-labelledby="tab-summary">
+                        <div class="summary-container">
+                            <textarea id="evaluationSummary" class="evaluation-text" spellcheck="true"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation and Generate Controls -->
+                    <div class="controls-container">
+                        <button class="nav-btn prev-btn" aria-label="Previous tab">
+                            <span class="arrow">←</span>
+                        </button>
+                        <button class="generate-btn" id="generateEvalBtn">
+                            Generate Evaluation
+                        </button>
+                        <button class="nav-btn next-btn" aria-label="Next tab">
+                            <span class="arrow">→</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
     <!-- Scripts -->
+    <script src="js/nlp-logic.js"></script>
     <script src="js/main.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/form-logic.js"></script>
+<button onclick='window.print();'>Print Evaluation</button>
 </body>
 </html>

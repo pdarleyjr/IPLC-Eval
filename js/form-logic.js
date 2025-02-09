@@ -216,7 +216,19 @@ class FormManager {
             });
             document.dispatchEvent(event);
         } else {
-            // Show error summary
+            // Enhanced error handling for missing required fields
+        // Show error summary
+        this.showErrorSummary = function(invalidFields) {
+            const summary = document.createElement('div');
+            summary.className = 'error-summary';
+            summary.textContent = 'Please correct the following errors:';
+            invalidFields.forEach(field => {
+                const errorItem = document.createElement('div');
+                errorItem.textContent = field.validationMessage || 'Missing required field';
+                summary.appendChild(errorItem);
+            });
+            document.body.appendChild(summary);
+        };
             this.showErrorSummary(invalidFields);
             // Scroll to first invalid field
             if (invalidFields[0]) {
@@ -433,7 +445,12 @@ class FormManager {
     }
 }
 
-// Initialize form manager when DOM is loaded
+// Add edit and save functionality
+        this.editAndSaveEvaluation = function() {
+            // Implement editing logic here
+            console.log('Editing and saving evaluation');
+        };
+        // Initialize form manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.formManager = new FormManager();
 });
