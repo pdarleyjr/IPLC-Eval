@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Evaluation Form</title>
     
     <!-- Favicons -->
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="css/noise-texture.css">
     
     <!-- TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
     
     <!-- Preload critical assets -->
@@ -27,8 +27,10 @@
 <body>
     <div class="container">
         <header class="header">
-            <img src="assets/logo.png" alt="IPLC Logo" class="logo">
-            <h1>Evaluation Form</h1>
+            <div class="header-content">
+                <img src="assets/logo.png" alt="IPLC Logo" class="logo">
+                <h1>Evaluation Form</h1>
+            </div>
         </header>
 
         <main class="main">
@@ -578,6 +580,33 @@
                                         </div>
                                     </div>
 
+                                    <!-- PLS-5 Scores -->
+                                    <div id="pls-5-scores" class="test-scores" style="display: none;">
+                                        <h4>PLS-5 Assessment</h4>
+                                        <div class="form-row">
+                                            <div class="form-field">
+                                                <label for="pls-auditory">Auditory Comprehension</label>
+                                                <input type="number" id="pls-auditory" name="pls-auditory" class="form-input" placeholder="Standard Score">
+                                                <input type="number" id="pls-auditory-percentile" name="pls-auditory-percentile" class="form-input" placeholder="Percentile Rank">
+                                                <input type="text" id="pls-auditory-age" name="pls-auditory-age" class="form-input" placeholder="Age Equivalent">
+                                            </div>
+                                            <div class="form-field">
+                                                <label for="pls-expressive">Expressive Communication</label>
+                                                <input type="number" id="pls-expressive" name="pls-expressive" class="form-input" placeholder="Standard Score">
+                                                <input type="number" id="pls-expressive-percentile" name="pls-expressive-percentile" class="form-input" placeholder="Percentile Rank">
+                                                <input type="text" id="pls-expressive-age" name="pls-expressive-age" class="form-input" placeholder="Age Equivalent">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-field">
+                                                <label for="pls-total">Total Language Score</label>
+                                                <input type="number" id="pls-total" name="pls-total" class="form-input" placeholder="Standard Score">
+                                                <input type="number" id="pls-total-percentile" name="pls-total-percentile" class="form-input" placeholder="Percentile Rank">
+                                                <input type="text" id="pls-total-age" name="pls-total-age" class="form-input" placeholder="Age Equivalent">
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <!-- CAAP-2 Scores -->
                                     <div id="caap-2-scores" class="test-scores" style="display: none;">
                                         <h4>CAAP-2 Assessment</h4>
@@ -1073,6 +1102,5 @@
     <script src="js/main.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/form-logic.js"></script>
-<button onclick='window.print();'>Print Evaluation</button>
 </body>
 </html>

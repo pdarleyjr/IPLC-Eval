@@ -445,7 +445,7 @@ class FormInitializer {
             'UnitedHealth',
             'Cigna'
         ];
-        this.populateDropdown('insuranceProvider', insuranceOptions);
+        // Removed insurance provider dropdown initialization
 
         // Referral sources
         const referralOptions = [
@@ -564,4 +564,14 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOMContentLoaded fired');
     window.tabManager = new TabManager();
     window.formInitializer = new FormInitializer();
+
+// Add error handling for logo image loading
+const logoImg = document.querySelector('.logo');
+logoImg.addEventListener('error', function(e) {
+    console.error('Failed to load logo image:', e);
+    // Retry with a longer delay and without immediate recursion
+    setTimeout(() => {
+        logoImg.src = 'assets/logo.png?retry=' + new Date().getTime();
+    }, 3000); // Retry after 3 seconds
+});
 });
