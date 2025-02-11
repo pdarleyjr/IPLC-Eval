@@ -1,0 +1,89 @@
+    You are an expert in web design, development, and website architecture with deep knowledge of modern web technologies. You have access to the following MCP servers and their respective tools.  
+
+
+****DO NOT REVIEW OR EDIT FILES IN ANY OTHER MANNER OTHER THAN BY UTILIZING THE FILESYSTEM MCP SERVER****
+
+        Memory MCP Server
+            Stores and retrieves entities, relations, and observations in a local knowledge graph.
+            Tools: create_entities, create_relations, add_observations, delete_entities, delete_observations, delete_relations, read_graph, search_nodes, open_nodes.
+
+***YOU WILL CONSTANTLY UPDATE YOUR MEMORY WITH INFO RELEVANT TO THE PROJECT TO ENSURE YOU DO NOT MAKE MISTAKES***
+
+        MCP Web Research Server
+            Provides real-time web research capabilities through Google search integration and webpage content extraction.
+            Tools: search_google, visit_page, take_screenshot.
+
+        Filesystem MCP Server
+            Allows read/write operations, file searches, editing, directory management, etc., within authorized directories.
+            Tools: read_file, read_multiple_files, write_file, edit_file, create_directory, list_directory, move_file, search_files, get_file_info, list_allowed_directories.
+
+        Sequential Thinking MCP Server
+            Enables a structured, step-by-step reasoning process to break down complex problems and revise solutions as needed.
+            Tool: sequential_thinking.
+
+    Use these servers to streamline your design and development process, maintain knowledge persistently across sessions, and minimize token usage.
+
+Clone the following repo https://github.com/h5bp/html5-boilerplate into the project directory and use the boilerplate template as needed for the project build.
+
+
+Develop a plan to implement the following:
+
+
+A static, front end only website for hosting on GitHub Pages that fosters an intimate, modern, experience. The purpose of the website is to streamline the process for Speech and Language Patholigist and Occupational Therapist to complete a client evaluation.  The website will feature a tabbed (tabular container with data entry fields hosted within modules that make them easy to interact with, and provide an optimized, enhanced process to complete the evaluation form.  
+
+"C:\Users\admin\Desktop\IPLC-Eval_v2\tabbed_container_wireframe.png"
+
+"C:\Users\admin\Desktop\IPLC-Eval_v2\Screenshot 2025-02-08 at 10-49-55 Illustrated Agency Website Hero Concept Studio Suprasoul by Suprasoul on Dribbble.png"
+
+The container will be modern with rounded corners and depth added with shadows and other new UI features.  Tabs will each be titled by the sections of the evaluation: Client Info, Background, Instrumentation, Outcome, Impressions, Recommendations.  
+
+The tabs will be filled with data entry fields that you will create based off the following templates:
+
+
+"C:\Users\admin\Desktop\IPLC-Eval_v2\Sample evals\Articulation Evaluation Results Template.txt"
+"C:\Users\admin\Desktop\IPLC-Eval_v2\Sample evals\Initial Feeding and Swallowing Evaluation Report (1).txt"
+"C:\Users\admin\Desktop\IPLC-Eval_v2\Sample evals\Initial Occupational Therapy Evaluation Template.txt"
+
+Analyze the 3 following files THOROUGHLY (from beginning to end).  Add every data entry field, text, chart, etc. that you see present.  Do not repeat text or entry fields seen in both.  Simply scan each file, and add all the original text, data entry fields (in the same form seen on the template), and anything else you deem relevant.  Organize the information into the tabs you see fit.
+
+THEN, analyze the following files THOROUGHLY (from beginning to end). Find information in the completed sample evaluations that you think we are not currently measuring with our current setup and add additional data entry fields into the appropriate tabs that provide the therapist with ways to measure this information.  
+
+"C:\Users\admin\Desktop\IPLC-Eval_v2\Sample evals\Martinez, Liam Initial Evaluation Summary.txt"
+
+
+AVOID using text boxes whenever possible, and try to streamline the process for the therapist by incorporating prefilled drop down menus, check boxes, toggles, "If this, than that" logic, etc.  Always give every data entry field an "other option" that if the user selects, a text box appears for them to be able to add something in that might have not been one of the prefilled selectable options.  
+
+
+I want the website to have the following features, layout, appearance, etc...
+
+Advanced interactivity that creates a dynamic and immersive user experience.
+
+Some examples of this include:
+
+    🖱️Hover animations
+
+    👉A dynamic Innovative UI / UX that works smoothly in mobile browsers with Swipe features and Scrolling gestures and breaks the traditional mold of website design.
+
+    👆Scrolling gestures
+
+    📊 Dynamic tables and graphs if needed
+
+    🛠️ Interactive tools
+
+
+Motion and microinteractions that bring pages to life
+
+*EXTREMELY IMPORTANT*
+
+I want the website to utilize Matte Gradient Pastel colors that bring the IPLC color scheme to life.  You do not have to only use the IPLC colors, but use matte gradient pastel colors that closely resemble IPLC colors that would look best, and flow smoothly without overwhelming the user or taking away from the site.  Analyze the logo image to determine the colors the brand endorses and then get creative with implementing this in the background, container, tabs, modules, etc...  
+
+"C:\Users\admin\Desktop\IPLC-Eval_v2\400dpiLogo.PNG"
+
+
+*Noises and Textures
+
+I ABSOLUTELY WANT Noise and textures overlayed on the matted gradient pastels, adding depth and realism to digital interfaces. Grainy effects, in particular, introduce dimensionality, making flat designs feel more tangible and engaging. Incorporating subtle textures and noise creates a more immersive experience, drawing users into the content. 
+
+These elements move away from overly polished, sterile designs, providing a tactile feel that enhances the visual richness and overall aesthetic of the site.
+
+*Interactive Micro-Interactions: The website includes subtle micro-interactions, such as smooth hover effects and animated transitions. These small, yet impactful details improve the user experience and highlight the site’s attention to detail.

@@ -1,0 +1,106 @@
+﻿
+
+Initial Occupational Therapy Evaluation Results 
+Name: Your text here     Evaluation Date:  Your text here    Date of Birth: Your text here     Place of Evaluation: Your text here     Age: Your text here     Examiner:  Your text here    
+Occupational Therapy  Evaluation Protocol
+The purpose of this occupational therapy evaluation is to assess your child's strengths and challenges in areas essential for their daily functioning, learning, and overall development. This evaluation focuses on key areas such as fine motor skills, gross motor skills, sensory processing, self-care abilities, and participation in play and school-related activities. The findings from this assessment will guide recommendations for therapy goals and strategies to support your child's growth at home, school, and in the community.
+
+The evaluation included the following components:  
+      ☐ Collection of Relevant Background Information
+      ☐ Behavioral Observation 
+      ☐ Peabody Developmental Motor Scales (PDMS-3)
+      ☐ Beery VMI 
+      ☐ Other: Your text here
+
+Our approach is child-centered, using standardized tools, clinical observations, and parent input to gain a comprehensive understanding of Child's Name('s) unique needs. We aim to collaborate with you throughout this process to ensure the best outcomes for your child. All measures were performed in Choose an item . Results of all formal and informal assessments appear to be reliable. 
+
+Relevant Background Information
+The following relevant information was collected via review of case history and through parent interview:
+
+Birth History -  	☐ remarkable		☐ unremarkable 
+Length of pregnancy:Your text here
+Type of delivery:  Your text here    
+Notes: Your text here
+
+Medical History -	 ☐ remarkable		☐ unremarkable
+Notes: Your text here      
+
+Developmental Milestones -       ☐ WNL		☐ Delayed
+Notes: Your text here  
+
+Language Milestones - 	 ☐ WNL		☐ Delayed
+Notes: Your text here      
+
+Environmental history - Your text here
+
+School History - Your text here
+
+Language/s spoken at home - Your text here 
+
+Other language exposed to -  Your text here
+
+Initial reported observations - Your text here
+
+Other - Your text here
+
+Behavioral Observation
+The behavioral observation portion of the evaluation provides valuable insight into how a child engages, responds, and participates during structured tasks, free play, and interactions with the clinician. It provides insight into attention, activity level, social interactions, and environmental awareness. These observations are essential for understanding how behavioral patterns influence Child's Name('s) ability to learn, communicate, and participate in daily activities. By identifying factors such as cooperation, emotional regulation, and awareness of others, we can develop strategies to enhance engagement, independence, and success across various environments, including home, school, and therapy.
+This section aims to highlight Child's Name('s) unique behavioral profile, focusing on strengths while addressing areas for growth to guide effective, individualized intervention planning. The following observations were made:
+
+Attending Skills - Choose an item
+
+Shifting Attention - Choose an item
+
+Task Initiation - Choose an item
+
+Engagement -  Choose an item
+
+Level of Activity - Choose an item
+
+Awareness of Others - Choose an item
+
+Awareness of Environmental Events - Choose an item
+
+Response Rate - Choose an item
+
+Cooperation - Choose an item
+
+Behavior -  Choose an item
+
+Social Interactions- Choose an item
+
+Peabody Developmental Motor Scales 
+The Peabody Developmental Motor Scales, Third Edition (PDMS-3), is a standardized assessment used to evaluate motor skills in children from birth to 5 years. It measures fine motor skills (e.g., grasping, hand coordination) and gross motor skills (e.g., balance, movement). The PDMS-3 includes five subtests: body control, body transport, object control, hand manipulation, and eye-hand coordination. Each subtest is scored separately, and the results are combined to yield a Gross Motor, Fine Motor, and Total Motor Composite Score, which can be compared to normative data. These scores help determine overall motor development, with percentile ranks and age-equivalency scores offering insight into the strengths and challenges in motor development, guiding intervention planning and supporting progress monitoring.
+
+The Peabody Developmental Motor Scales, Third Edition (PDMS-3), was administered to assess Child's Name('s) motor development. The results are summarized below, including standard scores, percentile ranks, and age equivalents for fine and gross motor skills.
+
+
+SubtestRaw ScoreScaled ScorePercentile RankAge EquivalentInterpretationBody Control (BC)Body Tansport (BT)Object Control (OC)Hand Manipulation (HM)Eye Hand Coordinate (EHC)
+
+Body Control (BC) - This subtest measures the ability to move the limbs and trunk, postural reactions, standing, bending, extending, stooping, balancing, jumping upward. It is an estimate of the child's ability to sustain control of his or her body within its center of gravity and retain equilibrium. Child's Name obtained a scaled score of Scaled Score, a percentile rank of Percentile Rank, and an age equivalent of Age Equivalent. These results yielded  Interpretation.
+
+Body Transport (BT) - This subtest measures the ability to make movements that propel the child from one location to another, such as rolling, crawling, creeping, walking, running, jumping forward and sideward, sliding, hopping, and skipping. This subtest also estimates the child's ability to transport his/her body from one base of support to another or to another location. Child's Name obtained a scaled score of Scaled Score, a percentile rank of Percentile Rank, and an age equivalent of Age Equivalent. These results yielded  Interpretation.
+
+Object Control (OC) - This subtest measures the ability to coordinate motor movements that require the incorporation of perception and movement, such as throwing, catching, bouncing, and kicking a ball.  Child's Name obtained a scaled score of Scaled Score, a percentile rank of Percentile Rank, and an age equivalent of Age Equivalent. These results yielded  Interpretation.
+
+Hand Manipulation (HM) - This subtest measures the ability to move the hands and fingers (and arms as appropriate) to complete tasks and measure dexterity. This includes manipulation of objects such as blocks, cups, and drawing instruments.  Child's Name obtained a scaled score of Scaled Score, a percentile rank of Percentile Rank, and an age equivalent of Age Equivalent. These results yielded  Interpretation.
+
+Eye-Hand Coordination (EHC) - This subtest measures the ability to interpret visual stimuli in coordination with hand-finger movements. It is an estimate of the child's ability to integrate and use his or her visual perceptual skills to perform complex eye-hand coordination tasks.  Child's Name obtained a scaled score of Scaled Score, a percentile rank of Percentile Rank, and an age equivalent of Age Equivalent. These results yielded  Interpretation.
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
