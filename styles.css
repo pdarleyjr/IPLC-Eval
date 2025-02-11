@@ -1,0 +1,104 @@
+:root {
+    --primary-color: #003366;
+    --secondary-color: #0073e6;
+    --accent-color-1: #8CC63F;
+    --accent-color-2: #FFA500;
+    --accent-color-3: #FFD700;
+    --background-color: #f0f8ff;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, var(--background-color), #ffffff);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+main {
+    flex: 1;
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#pdf-viewer {
+    width: 100%;
+    height: calc(100vh - 180px);
+    max-height: 1200px;
+    position: relative;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    overflow: auto;
+    margin-bottom: 1rem;
+}
+
+#generate-ai-narrative {
+    background-color: var(--accent-color-1);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+#generate-ai-narrative:hover {
+    background-color: var(--secondary-color);
+}
+
+#ai-output {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 1rem;
+}
+
+#ai-summary {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+footer {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    #pdf-viewer {
+        height: calc(100vh - 220px);
+    }
+}

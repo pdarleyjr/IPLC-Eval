@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPLC Articulation Evaluation Form</title>
+    <meta name="version" content="4.0.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>IPLC Articulation Evaluation Form</h1>
+    </header>
+    <main>
+        <div id="pdf-viewer"></div>
+        <button id="generate-ai-narrative">Generate AI Narrative</button>
+        <div id="ai-output" style="display: none;">
+            <h3>AI Generated Summary:</h3>
+            <textarea id="ai-summary" rows="10" cols="50" readonly></textarea>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 IPLC. All rights reserved.</p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
