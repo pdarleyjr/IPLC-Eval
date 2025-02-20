@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articulation Evaluation Protocol</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/print.css" media="print">
+</head>
+<body class="bg-light">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Error Boundary -->
+    <div class="error-boundary" id="errorBoundary">
+        <h4>An error occurred</h4>
+        <p id="errorMessage"></p>
+        <button class="btn btn-outline-danger" onclick="location.reload()">Reload Page</button>
+    </div>
+
+    <div class="container-fluid p-4">
+        <!-- Header with Logo -->
+        <header>
+            <img src="assets/images/400dpiLogo.PNG" alt="IPLC Logo" class="img-fluid">
+        </header>
+
+        <!-- Main Form Container -->
+        <main class="bg-white p-4 rounded shadow">
+            <form id="evaluationForm">
+                <!-- Patient Information Section -->
+                <section id="patientInfo" class="mb-4">
+                    <h2>Patient Information</h2>
+                    <div class="row g-3">
+        <div class="col-md-6">
+            <label for="firstName" class="form-label">First Name:</label>
+            <input type="text" class="form-control" id="firstName" required>
+        </div>
+        <div class="col-md-6">
+            <label for="lastName" class="form-label">Last Name:</label>
+            <input type="text" class="form-control" id="lastName" required>
+        </div>
+        <div class="col-md-6">
+            <label for="evaluationDate" class="form-label">Evaluation Date:</label>
+            <input type="date" class="form-control" id="evaluationDate" required>
+        </div>
+        <div class="col-md-6">
+            <label for="placeOfEvaluation" class="form-label">Place of Evaluation:</label>
+            <input type="text" class="form-control" id="placeOfEvaluation" required>
+        </div>
+        <div class="col-md-6">
+            <label for="dob" class="form-label">Date of Birth:</label>
+            <input type="date" class="form-control" id="dob" required>
+        </div>
+        <div class="col-md-6">
+            <label for="examiner" class="form-label">Examiner:</label>
+            <input type="text" class="form-control" id="examiner" required>
+        </div>
+        <div class="col-md-6">
+            <label for="age" class="form-label">Age:</label>
+            <input type="text" class="form-control" id="age" readonly>
+        </div>
+        <div class="col-md-6">
+            <label for="gender" class="form-label">Gender:</label>
+            <select class="form-control" id="gender" required>
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+    </div>
+                </section>
+
+                <!-- Protocol Section -->
+                <section id="protocol" class="mb-4">
+                    <h2>Protocol</h2>
+                    <p class="protocol-description">
+        An articulation evaluation was conducted to assess <span class="patient-name"></span>'s ability to produce speech 
+        sounds clearly and appropriately for their age. The purpose of the evaluation is to identify any 
+        speech sound errors that may affect ability to communicate effectively. Errors in articulation 
+        can significantly affect ability to be understood, academic performance, and social 
+        interactions. By understanding specific speech patterns, we can create a tailored intervention 
+        plan to improve overall communication skills.
+    </p>
+    <div class="components-list">
+        <p>The evaluation included the following components:</p>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="backgroundInfo">
+            <label class="form-check-label" for="backgroundInfo">Collection of Relevant Background Information</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="oralMechanism">
+            <label class="form-check-label" for="oralMechanism">Oral Mechanism Examination</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="speechSound">
+            <label class="form-check-label" for="speechSound">Speech Sound Assessment</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="speechSample">
+            <label class="form-check-label" for="speechSample">Connected Speech Sample Analysis</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="otherComponent">
+            <label class="form-check-label" for="otherComponent">Other:</label>
+            <input type="text" class="form-control mt-2" id="otherComponentText">
+        </div>
+    </div>
+                </section>
+
+                <!-- Background Information Section -->
+                <section id="backgroundInfo" class="mb-4">
+                    <h2>Relevant Background Information</h2>
+                    <p>The following relevant information was collected via review of case history and through parent interview:</p>
+    
+    <!-- Birth History -->
+    <div class="subsection mb-3">
+        <h3 class="h5">Birth History</h3>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="birthHistory" id="birthRemarkable" value="remarkable">
+            <label class="form-check-label" for="birthRemarkable">Remarkable</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="birthHistory" id="birthUnremarkable" value="unremarkable">
+            <label class="form-check-label" for="birthUnremarkable">Unremarkable</label>
+        </div>
+        <div class="mt-2">
+            <label for="pregnancyLength" class="form-label">Length of pregnancy:</label>
+            <input type="text" class="form-control" id="pregnancyLength">
+        </div>
+        <div class="mt-2">
+            <label for="deliveryType" class="form-label">Type of delivery:</label>
+            <input type="text" class="form-control" id="deliveryType">
+        </div>
+        <div class="mt-2">
+            <label for="birthNotes" class="form-label">Notes:</label>
+            <textarea class="form-control" id="birthNotes" rows="3"></textarea>
+        </div>
+    </div>
+
+    <!-- Medical History -->
+    <div class="subsection mb-3">
+        <h3 class="h5">Medical History</h3>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="medicalHistory" id="medicalRemarkable" value="remarkable">
+            <label class="form-check-label" for="medicalRemarkable">Remarkable</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="medicalHistory" id="medicalUnremarkable" value="unremarkable">
+            <label class="form-check-label" for="medicalUnremarkable">Unremarkable</label>
+        </div>
+        <div class="mt-2">
+            <label for="medicalNotes" class="form-label">Notes:</label>
+            <textarea class="form-control" id="medicalNotes" rows="3"></textarea>
+        </div>
+    </div>
+
+    <!-- Development & Language -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <h3 class="h5">Developmental Milestones</h3>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="developmentalMilestones" id="developmentalWNL" value="WNL">
+                <label class="form-check-label" for="developmentalWNL">WNL</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="developmentalMilestones" id="developmentalDelayed" value="Delayed">
+                <label class="form-check-label" for="developmentalDelayed">Delayed</label>
+            </div>
+            <div class="mt-2">
+                <label for="developmentalNotes" class="form-label">Notes:</label>
+                <textarea class="form-control" id="developmentalNotes" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <h3 class="h5">Language Milestones</h3>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="languageMilestones" id="languageWNL" value="WNL">
+                <label class="form-check-label" for="languageWNL">WNL</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="languageMilestones" id="languageDelayed" value="Delayed">
+                <label class="form-check-label" for="languageDelayed">Delayed</label>
+            </div>
+            <div class="mt-2">
+                <label for="languageNotes" class="form-label">Notes:</label>
+                <textarea class="form-control" id="languageNotes" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional History -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <h3 class="h5">Environmental History</h3>
+            <textarea class="form-control" id="environmentalHistory" rows="3"></textarea>
+        </div>
+        <div class="col-md-6 mb-3">
+            <h3 class="h5">School History</h3>
+            <textarea class="form-control" id="schoolHistory" rows="3"></textarea>
+        </div>
+    </div>
+
+    <!-- Language Information -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="homeLanguage" class="form-label">Language/s spoken at home:</label>
+            <input type="text" class="form-control" id="homeLanguage">
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="otherLanguages" class="form-label">Other language exposed to:</label>
+            <input type="text" class="form-control" id="otherLanguages">
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="initialObservations" class="form-label">Initial reported observations:</label>
+        <textarea class="form-control" id="initialObservations" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="otherInfo" class="form-label">Other:</label>
+        <textarea class="form-control" id="otherInfo" rows="3"></textarea>
+    </div>
+                </section>
+
+                <!-- Standardized Assessment Section -->
+                <section id="standardizedAssessment" class="mb-4">
+                    <h2>Standardized Assessment</h2>
+                    <p class="mb-3">
+        Formal standardized assessments were administered to evaluate speech and language skills. 
+        Results are interpreted based on standard scores with a mean of 100 and a standard deviation of ±15.
+    </p>
+
+    <!-- Score Interpretation Reference -->
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered table-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Standard Score Range</th>
+                    <th>Interpretation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Above 115</td>
+                    <td>Above Average</td>
+                </tr>
+                <tr>
+                    <td>85-115</td>
+                    <td>Average/Within Normal Limits</td>
+                </tr>
+                <tr>
+                    <td>78-84</td>
+                    <td>Marginal/Below Average/Mild</td>
+                </tr>
+                <tr>
+                    <td>71-77</td>
+                    <td>Low Range/Moderate</td>
+                </tr>
+                <tr>
+                    <td>70-50</td>
+                    <td>Very Low Range/Severe</td>
+                </tr>
+                <tr>
+                    <td>Below 50</td>
+                    <td>Profound</td>
+                </tr>
+            </tbody>
+        </table>
+                <div id="speechSound-intelligibility">
+    </div>
+
+    <!-- PLS-5 Assessment -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="h5 mb-0">Preschool Language Scale – Fifth Edition (PLS-5)</h3>
+        </div>
+        <div class="card-body">
+            <p class="card-text mb-3">
+                The PLS-5 is designed to assess receptive and expressive language skills in children 
+                from birth through 7 years, 11 months of age.
+            </p>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Subtest</th>
+                            <th>Standard Score</th>
+                            <th>Confidence Interval</th>
+                            <th>Percentile Rank</th>
+                            <th>Age Equivalent</th>
+                            <th>Severity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Auditory Comprehension</td>
+                            <td><input type="number" class="form-control" id="ac_standard_score"></td>
+                            <td><input type="text" class="form-control" id="ac_confidence_interval" placeholder="e.g., 84-100"></td>
+                            <td><input type="text" class="form-control" id="ac_percentile" placeholder="e.g., 27%"></td>
+                            <td><input type="text" class="form-control" id="ac_age_equivalent" placeholder="e.g., 2-11"></td>
+                            <td><input type="text" class="form-control" id="ac_severity" readonly></td>
+                        </tr>
+                        <tr>
+                            <td>Expressive Communication</td>
+                            <td><input type="number" class="form-control" id="ec_standard_score"></td>
+                            <td><input type="text" class="form-control" id="ec_confidence_interval" placeholder="e.g., 86-99"></td>
+                            <td><input type="text" class="form-control" id="ec_percentile" placeholder="e.g., 30%"></td>
+                            <td><input type="text" class="form-control" id="ec_age_equivalent" placeholder="e.g., 2-10"></td>
+                            <td><input type="text" class="form-control" id="ec_severity" readonly></td>
+                        </tr>
+                        <tr>
+                            <td>Total Language Score</td>
+                            <td><input type="number" class="form-control" id="tl_standard_score"></td>
+                            <td><input type="text" class="form-control" id="tl_confidence_interval" placeholder="e.g., 85-98"></td>
+                            <td><input type="text" class="form-control" id="tl_percentile" placeholder="e.g., 27%"></td>
+                            <td><input type="text" class="form-control" id="tl_age_equivalent" placeholder="e.g., 2-11"></td>
+                            <td><input type="text" class="form-control" id="tl_severity" readonly></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relative Strengths -->
+    <div class="mb-3">
+        <h4 class="h6">Relative Strengths</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_pronouns">
+            <label class="form-check-label" for="strength_pronouns">Understanding pronouns (me, my, your)</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_commands">
+            <label class="form-check-label" for="strength_commands">Following commands without gestural cues</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_symbolic">
+            <label class="form-check-label" for="strength_symbolic">Engaging in symbolic play</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_objects">
+            <label class="form-check-label" for="strength_objects">Understanding use of objects</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_spatial">
+            <label class="form-check-label" for="strength_spatial">Understanding spatial concepts without gestural cues</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_quantitative">
+            <label class="form-check-label" for="strength_quantitative">Understanding quantitative concepts</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_inferences">
+            <label class="form-check-label" for="strength_inferences">Making inferences</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_analogies">
+            <label class="form-check-label" for="strength_analogies">Understanding analogies</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_negatives">
+            <label class="form-check-label" for="strength_negatives">Understanding negatives in sentences</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="strength_colors">
+            <label class="form-check-label" for="strength_colors">Identifying colors</label>
+        </div>
+    </div>
+
+    <!-- Areas of Difficulty -->
+    <div class="mb-3">
+        <h4 class="h6">Areas of Difficulty</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="difficulty_actions">
+            <label class="form-check-label" for="difficulty_actions">Recognizing actions in pictures</label>
+        </div>
+        <textarea class="form-control mt-2" id="additional_difficulties" rows="3" placeholder="Additional areas of difficulty..."></textarea>
+    </div>
+                </section>
+
+                <!-- Oral Mechanism Section -->
+                <section id="oralMechanism" class="mb-4"><div id="oralMechanism-structure">
+                    <h2>Oral Mechanism Evaluation</h2>
+                    <p class="mb-3">
+        Informal assessment of the oral speech mechanism was performed through observation to 
+        assess the adequacy of the structures and functions of the oral-motor mechanism. This 
+        includes evaluating the symmetry, strength, coordination, and range of motion of the oral 
+        structures, as well as breath support and motor control.
+    </p>
+    
+    <h3 class="h5 mb-3">Structure Assessment</h3>
+    
+    <!-- Face -->
+    <div class="mb-3">
+        <h4 class="h6">Face</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="faceStructure" id="faceWNL">
+            <label class="form-check-label" for="faceWNL">
+                Within Normal Limits: The face was observed to be symmetrical in shape, with no observed abnormalities in structure or alignment.
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="faceStructure" id="faceConcern">
+            <label class="form-check-label" for="faceConcern">
+                Areas of Concern Observed: Facial asymmetry noted, with irregularities in shape, alignment, or appearance.
+            </label>
+        </div>
+    </div>
+
+    <!-- Mandible and Maxilla -->
+    <div class="mb-3">
+        <h4 class="h6">Mandible and Maxilla</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="mandibleStructure" id="mandibleWNL">
+            <label class="form-check-label" for="mandibleWNL">
+                Within Normal Limits: The mandible and maxilla were observed to be properly aligned, and their size, height, and shape are consistent with chronological age.
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="mandibleStructure" id="mandibleConcern">
+            <label class="form-check-label" for="mandibleConcern">
+                Areas of Concern Observed: Irregular alignment, disproportionate size, or shape observed in mandible and maxilla.
+            </label>
+        </div>
+    </div>
+
+    <!-- Teeth and Dental Occlusion -->
+    <div class="mb-3">
+        <h4 class="h6">Teeth and Dental Occlusion</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="teethStructure" id="teethWNL">
+            <label class="form-check-label" for="teethWNL">
+                Within Normal Limits: Dental occlusion and alignment were observed to be appropriate for chronological age, with no noticeable abnormalities or malformations.
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="teethStructure" id="teethConcern">
+            <label class="form-check-label" for="teethConcern">
+                Areas of Concern Observed: Dental malocclusion observed, impacting potential articulation and oral function.
+            </label>
+        </div>
+    </div>
+
+    <!-- Palatal Arch -->
+    <div class="mb-3">
+        <h4 class="h6">Palatal Arch</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="palatalStructure" id="palatalWNL">
+            <label class="form-check-label" for="palatalWNL">
+                Within Normal Limits: the palatal arch was observed to be symmetrical and of appropriate height and shape for chronological age.
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="palatalStructure" id="palatalConcern">
+            <label class="form-check-label" for="palatalConcern">
+                Areas of Concern Observed: High, narrow, or asymmetrical palatal arch observed, which may influence resonance or articulation.
+            </label>
+        </div>
+    </div>
+
+    <!-- Lips -->
+    <div class="mb-3">
+        <h4 class="h6">Lips</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="lipsStructure" id="lipsWNL">
+            <label class="form-check-label" for="lipsWNL">
+                Within Normal Limits: Lips were observed to be of typical size and shape, with no abnormalities observed at rest or during movement.
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="lipsStructure" id="lipsConcern">
+            <label class="form-check-label" for="lipsConcern">
+                Areas of Concern Observed: Structural abnormalities were observed that could impact articulation.
+            </label>
+        </div>
+    </div>
+
+    <!-- Structure Notes -->
+    <div class="mb-4">
+        <label for="structureNotes" class="form-label">Structure Notes:</label>
+        <textarea class="form-control" id="structureNotes" rows="3"></textarea>
+    </div>
+
+    <h3 class="h5 mb-3">Function Assessment</h3>
+
+    <!-- Jaw Function -->
+    <div class="mb-3">
+        <h4 class="h6">Jaw Function</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="jawFunction" id="jawWNL">
+            <label class="form-check-label" for="jawWNL">
+                Within Normal Limits: Jaw was observed to demonstrate smooth and controlled movements with adequate stability for speech production.
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="jawFunction" id="jawConcern">
+            <label class="form-check-label" for="jawConcern">
+                Areas of Concern Observed: Irregular jaw movements or instability noted during speech production.
+            </label>
+        </div>
+    </div>
+
+    <!-- Velopharyngeal Closure -->
+    <div class="mb-3">
+        <h4 class="h6">Velopharyngeal Closure</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="velopharyngealFunction" id="velopharyngealWNL">
+            <label class="form-check-label" for="velopharyngealWNL">
+                Within Normal Limits: Adequate velopharyngeal closure observed during speech, with no signs of hypernasality.
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="velopharyngealFunction" id="velopharyngealConcern">
+            <label class="form-check-label" for="velopharyngealConcern">
+                Areas of Concern Observed: Insufficient velopharyngeal closure noted, leading to hypernasality or other resonance issues.
+            </label>
+        </div>
+    </div>
+
+    <!-- Phonation and Breath Support -->
+    <div class="mb-3">
+        <h4 class="h6">Phonation and Breath Support</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="phonationFunction" id="phonationWNL">
+            <label class="form-check-label" for="phonationWNL">
+                Within Normal Limits: Sufficient breath support observed for speech tasks, with 1–3 seconds of sustained phonation and appropriate voice quality.
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="phonationFunction" id="phonationConcern">
+            <label class="form-check-label" for="phonationConcern">
+                Areas of Concern Observed: Reduced breath control or strained/hoarse voice quality observed, impacting phonation and articulation.
+            </label>
+        </div>
+    </div>
+
+    <!-- Oral Reflexes -->
+    <div class="mb-3">
+        <h4 class="h6">Oral Reflexes</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="oralReflexes" id="reflexesWNL">
+            <label class="form-check-label" for="reflexesWNL">
+                Within Normal Limits: Reflexes observed to be appropriate for age (e.g., gag reflex present; rooting and biting reflexes absent).
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="oralReflexes" id="reflexesConcern">
+            <label class="form-check-label" for="reflexesConcern">
+                Areas of Concern Observed: Presence of primitive reflexes (e.g., rooting or biting) that should be inhibited for the child's age were observed.
+            </label>
+        </div>
+    </div>
+
+    <!-- Motor Speech Coordination -->
+    <div class="mb-3">
+        <h4 class="h6">Motor Speech Coordination</h4>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="motorCoordination" id="motorWNL">
+            <label class="form-check-label" for="motorWNL">
+                Within Normal Limits: Smooth and accurate coordination observed between jaw, lips, and tongue during speech tasks.
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="motorCoordination" id="motorConcern">
+            <label class="form-check-label" for="motorConcern">
+                Areas of Concern Observed: Inconsistent or disorganized movement patterns observed, impacting speech precision and intelligibility.
+            </label>
+        </div>
+    </div>
+
+    <!-- Function Notes -->
+    </div>
+    <div class="mb-4">
+        <label for="functionNotes" class="form-label">Function Notes:</label>
+        <textarea class="form-control" id="functionNotes" rows="3"></textarea>
+    </div>
+                </section>
+
+                    <div class="mb-4">
+                        <label for="oralMechanismOverallNotes" class="form-label">Overall Notes:</label>
+                        <textarea class="form-control" id="oralMechanismOverallNotes" rows="3"></textarea>
+                    </div>
+                <!-- Speech Sound Assessment Section -->
+                <section id="speechSound" class="mb-4">
+                    <h2>Speech Sound Assessment</h2>
+                    <p class="mb-3">
+        Speech Sound Assessment: The ability to produce speech sounds was assessed throughout 
+        the course of the evaluation in order to measure articulation of sounds and determine types of 
+        misarticulation. The Clinical Assessment of Articulation and Phonology - 2nd Edition 
+        (CAAP-2) was administered. Additionally, spontaneous speech was elicited both in words and 
+        connected speech. Data was collected and analyzed using the Age of Customary Consonant 
+        Production chart as recommended by The American Speech-Language-Hearing Association 
+        (ASHA). The acquisition of speech sounds is a developmental process and children often 
+        demonstrate "typical" errors and phonological patterns during this acquisition period. 
+        Developmentally appropriate error patterns were taken into consideration during assessment 
+        of speech sounds in order to differentiate typical errors from those that are not.
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Sound</th>
+                    <th>Misarticulated</th>
+                    <th>Position of word</th>
+                    <th>Type</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="sound-row" data-sound="/p/">
+                    <td>/p/</td>
+                    <td><input type="checkbox" class="form-check-input" id="sound_p"></td>
+                    <td><input type="text" class="form-control" id="sound_p_position"></td>
+                    <td><input type="text" class="form-control" id="sound_p_type"></td>
+                    <td><input type="text" class="form-control" id="sound_p_detail"></td>
+                </tr>
+                <!-- Rest of the sound rows -->
+
+            </tbody>
+        </table>
+                <div id="speechSound-intelligibility">
+    </div>
+                </section>
+
+                <!-- Speech Sample Analysis Section -->
+                <section id="speechSample" class="mb-4">
+                    <h2>Speech Sample Analysis</h2>
+                    <p class="mb-3">
+        A speech sample was collected during spontaneous conversation, play-based activities, and 
+        picture description tasks to assess articulation and intelligibility in connected speech. The 
+        following observations were made:
+    </p>
+    
+    <!-- Sound Production -->
+    <div class="mb-3">
+        <h3 class="h5">Sound Production</h3>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="accurateProduction">
+            <label class="form-check-label" for="accurateProduction">Accurate production of sounds observed.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="substitutionErrors">
+            <label class="form-check-label" for="substitutionErrors">Substitution errors noted in conversation.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="omissionErrors">
+            <label class="form-check-label" for="omissionErrors">Omission of sounds observed in conversation.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="distortionErrors">
+            <label class="form-check-label" for="distortionErrors">Distortion of sounds noted in conversation.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="additionErrors">
+            <label class="form-check-label" for="additionErrors">Addition of sounds observed in conversation.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="otherSoundProduction">
+            <label class="form-check-label" for="otherSoundProduction">Other:</label>
+            <input type="text" class="form-control mt-2" id="otherSoundProductionText">
+        </div>
+    </div>
+
+    <!-- Phonological Patterns -->
+    <div class="mb-3">
+        <h3 class="h5">Phonological Patterns</h3>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="clusterReduction">
+            <label class="form-check-label" for="clusterReduction">Cluster reduction</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="finalConsonantDeletion">
+            <label class="form-check-label" for="finalConsonantDeletion">Final consonant deletion</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="weakSyllableDeletion">
+            <label class="form-check-label" for="weakSyllableDeletion">Weak syllable deletion</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="frontingSounds">
+            <label class="form-check-label" for="frontingSounds">Fronting of sounds</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="glidingLiquids">
+            <label class="form-check-label" for="glidingLiquids">Gliding of liquids</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="stopping">
+            <label class="form-check-label" for="stopping">Stopping</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="otherPattern">
+            <label class="form-check-label" for="otherPattern">Other:</label>
+            <input type="text" class="form-control mt-2" id="otherPatternText">
+        </div>
+        <div class="mt-2">
+            <label for="phonologicalNotes" class="form-label">Notes:</label>
+            <textarea class="form-control" id="phonologicalNotes" rows="3"></textarea>
+        </div>
+    </div>
+
+    <!-- Speech Intelligibility -->
+    <div class="mb-3">
+        <h3 class="h5">Speech Intelligibility</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="h6">Familiar Listeners:</h4>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="familiarIntelligibility" id="familiarHigh">
+                    <label class="form-check-label" for="familiarHigh">Highly intelligible (90–100%)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="familiarIntelligibility" id="familiarModerate">
+                    <label class="form-check-label" for="familiarModerate">Moderately intelligible (70–89%)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="familiarIntelligibility" id="familiarPoor">
+                    <label class="form-check-label" for="familiarPoor">Poor intelligibility (50–69%)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="familiarIntelligibility" id="familiarVeryPoor">
+                    <label class="form-check-label" for="familiarVeryPoor">Very poor intelligibility (<50%)</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4 class="h6">Unfamiliar Listeners:</h4>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="unfamiliarIntelligibility" id="unfamiliarHigh">
+                    <label class="form-check-label" for="unfamiliarHigh">Highly intelligible (90–100%)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="unfamiliarIntelligibility" id="unfamiliarModerate">
+                    <label class="form-check-label" for="unfamiliarModerate">Moderately intelligible (70–89%)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="unfamiliarIntelligibility" id="unfamiliarPoor">
+                    <label class="form-check-label" for="unfamiliarPoor">Poor intelligibility (50–69%)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="unfamiliarIntelligibility" id="unfamiliarVeryPoor">
+                    <label class="form-check-label" for="unfamiliarVeryPoor">Very poor intelligibility (<50%)</label>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2">
+            <label for="intelligibilityNotes" class="form-label">Notes:</label>
+            <textarea class="form-control" id="intelligibilityNotes" rows="3"></textarea>
+        </div>
+    </div>
+
+        </div>
+    </div>
+    <div class="mb-4">
+        <label for="speechSoundOverallNotes" class="form-label">Overall Notes:</label>
+        <textarea class="form-control" id="speechSoundOverallNotes" rows="3"></textarea>
+    </div>
+</section>
+    <!-- Connected Speech Characteristics -->
+    <div class="mb-3">
+        <h3 class="h5">Connected Speech Characteristics</h3>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="speechOrganized">
+            <label class="form-check-label" for="speechOrganized">Speech is organized and fluent.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="speechDisorganized">
+            <label class="form-check-label" for="speechDisorganized">Disorganized speech noted (e.g., frequent pauses, hesitations).</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="speechRateNormal">
+            <label class="form-check-label" for="speechRateNormal">Speech rate is within normal limits.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="speechRateSlow">
+            <label class="form-check-label" for="speechRateSlow">Speech rate is slow, impacting clarity.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="speechRateFast">
+            <label class="form-check-label" for="speechRateFast">Speech rate is fast, impacting clarity.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="selfCorrections">
+            <label class="form-check-label" for="selfCorrections">Self-corrections observed.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="otherCharacteristic">
+            <label class="form-check-label" for="otherCharacteristic">Other:</label>
+            <input type="text" class="form-control mt-2" id="otherCharacteristicText">
+        </div>
+        <div class="mt-2">
+            <label for="characteristicsNotes" class="form-label">Notes:</label>
+            <textarea class="form-control" id="characteristicsNotes" rows="3"></textarea>
+        </div>
+    </div>
+
+    <!-- Strengths Observed -->
+    <div class="mb-3">
+        <h3 class="h5">Strengths Observed</h3>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="varietySentences">
+            <label class="form-check-label" for="varietySentences">Variety of sentence structures used.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="ageVocabulary">
+            <label class="form-check-label" for="ageVocabulary">Age-appropriate vocabulary observed.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="selfCorrectEfforts">
+            <label class="form-check-label" for="selfCorrectEfforts">Efforts to self-correct noted.</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="otherStrength">
+            <label class="form-check-label" for="otherStrength">Other:</label>
+            <input type="text" class="form-control mt-2" id="otherStrengthText">
+        </div>
+    </div>
+                </section>
+
+                <!-- Language Sample Section -->
+                <section id="languageSample" class="mb-4">
+                    <h2>Language Sample Analysis</h2>
+                    <p class="mb-3">
+        A language sample was obtained to evaluate spontaneous speech and obtain more information about language 
+        skills in a less structured environment. The language sample was collected informally through play and 
+        observed for semantic, syntactic, morphological and pragmatic language abilities.
+    </p>
+
+    <!-- Language Structure -->
+    <div class="mb-3">
+        <h3 class="h5">Language Structure</h3>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="two_word" name="language_structure">
+            <label class="form-check-label" for="two_word">Uses 2-word combinations</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="three_word" name="language_structure">
+            <label class="form-check-label" for="three_word">Uses 3-4 word sentences</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="complex_sentence" name="language_structure">
+            <label class="form-check-label" for="complex_sentence">Uses complex sentences</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="expanded_sentence" name="language_structure">
+            <label class="form-check-label" for="expanded_sentence">Uses expanded sentences</label>
+        </div>
+    </div>
+
+    <!-- Language Content -->
+    <div class="mb-3">
+        <h3 class="h5">Language Content</h3>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="naming_objects" name="language_content">
+            <label class="form-check-label" for="naming_objects">Names objects</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="action_words" name="language_content">
+            <label class="form-check-label" for="action_words">Uses action words</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="possession" name="language_content">
+            <label class="form-check-label" for="possession">Uses words for possession</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="descriptions" name="language_content">
+            <label class="form-check-label" for="descriptions">Describes objects and people</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="recurrence" name="language_content">
+            <label class="form-check-label" for="recurrence">Denotes recurrence</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="give_reason" name="language_content">
+            <label class="form-check-label" for="give_reason">Gives reason</label>
+        </div>
+    </div>
+
+    <!-- Social Language Use -->
+    <div class="mb-3">
+        <h3 class="h5">Social Language Use</h3>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="direct_attention" name="social_language_use">
+            <label class="form-check-label" for="direct_attention">Directs attention</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="talk_actions" name="social_language_use">
+            <label class="form-check-label" for="talk_actions">Talks about current actions</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="answer_questions" name="social_language_use">
+            <label class="form-check-label" for="answer_questions">Answers when talked to</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="interact_person" name="social_language_use">
+            <label class="form-check-label" for="interact_person">Interacts with another person</label>
+        </div>
+    </div>
+
+    <!-- Additional Observations -->
+    <div class="mb-3">
+        <h3 class="h5">Additional Observations</h3>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="word_finding" name="additional_observations">
+            <label class="form-check-label" for="word_finding">Age-appropriate word finding difficulties</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="jargon" name="additional_observations">
+            <label class="form-check-label" for="jargon">Uses jargon in open-ended conversation</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="decreased_articulation" name="additional_observations">
+            <label class="form-check-label" for="decreased_articulation">Decreased articulation as length and complexity increases</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="language_sample_notes" class="form-label">Additional Notes:</label>
+        <textarea class="form-control" id="language_sample_notes" rows="4" placeholder="Enter any additional observations about language sample..."></textarea>
+    </div>
+                </section>
+
+                <!-- Clinical Impressions Section -->
+                <section id="clinicalImpressions" class="mb-4">
+                    <h2>Clinical Impressions</h2>
+                    <div class="mb-3">
+        <label for="clinicalImpressions" class="form-label">Based on the results of formal and informal assessment, as well as parent interview and clinical observation:</label>
+        <textarea class="form-control" id="clinicalImpressions" rows="4"></textarea>
+    </div>
+    <div class="mb-3">
+        <p>Based on the results from this evaluation, family support, and adherence to recommendations that follow, prognosis for improvement is favorable.</p>
+    </div>
+                </section>
+
+                <!-- Recommendations Section -->
+                <section id="recommendations" class="mb-4">
+                    <h2>Recommendations</h2>
+                    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="individualTherapy">
+        <label class="form-check-label" for="individualTherapy">Individual speech therapy is recommended</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="homeProgram">
+        <label class="form-check-label" for="homeProgram">Implementation of home practice program</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="reevaluation">
+        <label class="form-check-label" for="reevaluation">Reevaluation in 6 months to monitor progress</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="parentTraining">
+        <label class="form-check-label" for="parentTraining">Parent training and education</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="referral">
+        <label class="form-check-label" for="referral">Referral to:</label>
+        <input type="text" class="form-control mt-2" id="referralDetails">
+    </div>
+    <div class="mb-3">
+        <label for="otherRecommendations" class="form-label">Other Recommendations:</label>
+        <textarea class="form-control" id="otherRecommendations" rows="3"></textarea>
+    </div>
+                </section>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-end gap-2 mb-4">
+                    <button id="generateReport" class="btn btn-primary">Generate Summary</button>
+                    <button onclick="event.preventDefault(); if (window.pdfGenerator) { window.pdfGenerator.generatePDF().catch(error => console.error('PDF generation failed:', error)); } else { console.error('PDF Generator not initialized'); alert('PDF Generator not initialized. Please try refreshing the page.'); }" class="btn btn-primary">Download PDF</button>
+                </div>
+            </form>
+        </main>
+
+        <!-- Footer with Contact Info -->
+        <footer>
+            <div class="contact-info">
+                <p class="mb-1">Phone: 786-622-2353 | Email: info@iplcmiami.com</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>window.jsPDF = window.jspdf.jsPDF;</script>
+
+    <!-- Application Scripts -->
+    <script type="module">
+        // Import and initialize modules in the correct order
+        import { dbManager } from './assets/js/db-utils.js';
+        import { templateEngine } from './assets/js/template-engine.js';
+        import FormHandler from './assets/js/form-handler.js';
+        import app from './assets/js/main.js';
+        import './assets/js/summarizer.js';
+        import './assets/js/pdf-generator.js';
+    </script>
+</body>
+</html>

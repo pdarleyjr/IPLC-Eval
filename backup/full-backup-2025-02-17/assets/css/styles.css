@@ -1,0 +1,210 @@
+/* IPLC Color Scheme */
+:root {
+    --primary-color: #003366;    /* Deep blue */
+    --secondary-color: #0073e6;  /* Sky Blue */
+    --accent-color: #8CC63F;     /* Lime Green */
+    --warning-color: #FFA500;    /* Orange */
+    --highlight-color: #FFD700;  /* Yellow */
+    --bg-color: #F0F0F0;         /* Light Grey */
+    --white: #FFFFFF;            /* White */
+    --text-color: #333333;       /* Dark Grey */
+    --link-color: #0057B8;       /* Link Blue */
+}
+
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    line-height: 1.6;
+}
+
+/* Header Styles */
+header {
+    background-color: var(--white);
+    border-bottom: 3px solid var(--primary-color);
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.contact-info {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+/* Form Container */
+main {
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Styles */
+section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--bg-color);
+}
+
+section:last-child {
+    border-bottom: none;
+}
+
+/* Headings */
+h2 {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+h3 {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+/* Form Elements */
+.form-label {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.5rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 115, 230, 0.25);
+}
+
+/* Checkboxes and Radio Buttons */
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-label {
+    cursor: pointer;
+    padding-left: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Protocol Description */
+.protocol-description {
+    background-color: var(--bg-color);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+}
+
+/* Components List */
+.components-list {
+    background-color: var(--white);
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Subsections */
+.subsection {
+    background-color: var(--bg-color);
+    padding: 1.5rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 1rem;
+    }
+
+    header {
+        margin-bottom: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .d-flex {
+        flex-direction: column;
+    }
+
+    .form-check-inline {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background-color: var(--white);
+    }
+
+    .container-fluid {
+        padding: 0;
+    }
+
+    main {
+        box-shadow: none;
+    }
+
+    .btn {
+        display: none;
+    }
+}
+
+/* Accessibility */
+:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    :root {
+        --primary-color: #000080;
+        --secondary-color: #0000FF;
+        --text-color: #000000;
+        --bg-color: #FFFFFF;
+    }
+}
